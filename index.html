@@ -7,49 +7,26 @@
     <title>Chicken Pop</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="module" src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;900&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
           extend: {
-            fontFamily: { sans: ['Nunito', 'sans-serif'] },
+            fontFamily: { sans: ['Space Grotesk', 'sans-serif'] },
             colors: {
-              charcoal: '#171e19',
-              'vibrant-red': '#ca0013',
-              'gray-green': '#b7c6c2',
-              'off-white': '#eeebe3',
-              white: '#ffffff'
+              'neo-cream': '#FFFDF5',
+              'neo-black': '#000000',
+              'neo-red': '#FF3333',     /* Fire Red */
+              'neo-orange': '#FF6B00',   /* Blaze Orange */
+              'neo-yellow': '#FFD93D',   /* Spark Yellow */
+              'neo-white': '#FFFFFF',
             },
             boxShadow: {
-              'soft': '0 20px 50px -12px rgba(0,0,0,0.08)'
-            },
-            borderRadius: {
-              'nested': '24px',
-              'card': '40px'
-            }
-          }
-        }
-      }
-    </script>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: { sans: ['Nunito', 'sans-serif'] },
-            colors: {
-              charcoal: '#171e19',
-              'vibrant-red': '#ca0013',
-              'gray-green': '#b7c6c2',
-              'off-white': '#eeebe3',
-              white: '#ffffff'
-            },
-            boxShadow: {
-              'soft': '0 20px 50px -12px rgba(0,0,0,0.08)'
-            },
-            borderRadius: {
-              'nested': '24px',
-              'card': '40px'
+              'neo': '8px 8px 0px 0px #000',
+              'neo-sm': '4px 4px 0px 0px #000',
+              'neo-hover': '12px 12px 0px 0px #000'
             }
           }
         }
@@ -58,49 +35,54 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="bg-charcoal text-off-white font-sans h-screen flex flex-col overflow-hidden selection:bg-vibrant-red text-white selection:text-white">
+<body class="bg-neo-cream text-neo-black font-sans h-screen flex flex-col overflow-hidden selection:bg-neo-red selection:text-white">
 
-    <header class="h-16 bg-charcoal/90 border-b border-gray-green/20 flex items-center justify-between px-6 shrink-0 z-20 shadow-soft">
+    <!-- NEO-BRUTALIST TEXTURE OVERLAY -->
+    <div class="pointer-events-none fixed inset-0 opacity-[0.03] z-0" style="background-image: radial-gradient(circle, #000 2px, transparent 2.5px); background-size: 20px 20px;"></div>
+
+    <header class="h-20 bg-neo-yellow border-b-4 border-neo-black flex items-center justify-between px-6 shrink-0 z-20 shadow-neo">
         <div class="flex items-center gap-3">
-            <img src="assets/animation/Chicken.svg" alt="Logo" class="w-8 h-8">
+            <div class="border-4 border-neo-black bg-neo-white p-1 shadow-neo-sm transform -rotate-1 hover:rotate-2 transition-transform duration-200">
+                <img src="assets/animation/Chicken.svg" alt="Logo" class="w-10 h-10">
+            </div>
             <div>
-                <h1 class="font-black text-[32px] tracking-wider text-white italic">CHICKEN <span class="text-yellow-400">FRY</span></h1>
+                <h1 class="font-black text-3xl sm:text-4xl tracking-tighter uppercase leading-none drop-shadow-[2px_2px_0px_#000] text-neo-white" style="-webkit-text-stroke: 1.5px black;">CHICKEN <span class="text-neo-red" style="-webkit-text-stroke: 0px;">FRY</span></h1>
             </div>
         </div>
 
         <div class="flex items-center gap-4">
-            <div class="bg-charcoal/80 rounded-lg p-1 flex items-center border border-gray-green/20 shadow-inner">
-                <div class="bg-charcoal/90 rounded px-4 py-1.5 flex items-center gap-2">
-                    <span class="text-vibrant-red font-bold">$</span>
-                    <span id="balance-display" class="font-mono font-bold text-lg text-white">1000.00</span>
+            <div class="bg-neo-white border-4 border-neo-black p-2 shadow-neo-sm transform rotate-1">
+                <div class="flex items-center gap-2">
+                    <span class="text-neo-red font-black text-xl drop-shadow-[1px_1px_0px_#000]">$</span>
+                    <span id="balance-display" class="font-black text-xl text-neo-black">1000.00</span>
                 </div>
             </div>
         </div>
     </header>
 
-    <main class="flex-1 relative flex flex-col bg-charcoal/90 overflow-hidden">
+    <main class="flex-1 relative flex flex-col pt-8 pb-4 overflow-hidden z-10">
 
         <div id="explosion-effect" class="fixed inset-0 z-[100] pointer-events-none flex items-center justify-center opacity-0 transition-opacity duration-300">
-            <dotlottie-player src="assets/animation/Fire%20-%20Feu%20-%20Fuego.lottie" background="transparent" speed="1" loop autoplay class="w-full h-full object-cover mix-blend-screen opacity-90 drop-shadow-[0_0_20px_rgba(255,100,0,0.8)]"></dotlottie-player>
+            <dotlottie-player src="assets/animation/Fire%20-%20Feu%20-%20Fuego.lottie" background="transparent" speed="1" loop autoplay class="w-full h-full object-cover mix-blend-screen opacity-90 drop-shadow-[8px_8px_0px_#000]"></dotlottie-player>
         </div>
 
         <div id="status-overlay" class="absolute inset-0 z-30 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-300">
-            <div id="status-message" class="text-5xl font-black italic tracking-widest drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]"></div>
+            <div id="status-message" class="text-7xl font-black uppercase tracking-tighter" style="-webkit-text-stroke: 3px black; text-shadow: 6px 6px 0px #000;"></div>
         </div>
 
-        <div class="flex-1 w-full max-w-7xl mx-auto p-4 md:p-8 flex items-center justify-center relative">
+        <div class="flex-1 w-full max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-center relative">
 
-            <div class="w-full h-72 sm:h-96 bg-charcoal/80 rounded-nested relative flex border-b-[12px] border-gray-green/30 shadow-[inset_0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden">
+            <div class="w-full h-72 sm:h-96 bg-neo-white border-8 border-neo-black relative flex shadow-neo group hover:shadow-neo-hover transform transition-transform hover:-translate-y-1 duration-200 overflow-hidden">
 
-                <div class="w-16 sm:w-24 h-full relative flex items-end justify-center pb-6 shrink-0 bg-charcoal/80 border-r border-gray-green/20 z-10">
-                    <div class="w-12 sm:w-16 h-24 sm:h-32 bg-charcoal rounded-t-full absolute bottom-0 shadow-[inset_0_10px_20px_rgba(0,0,0,0.8)] border border-gray-green/20 border-b-0"></div>
+                <div id="start-zone" class="w-24 sm:w-32 h-full relative flex items-end justify-center pb-6 shrink-0 bg-neo-white border-r-4 border-neo-black z-10 shadow-[4px_0_0_#000]">
+                    <div class="w-16 sm:w-20 h-24 sm:h-32 bg-neo-black border-4 border-neo-black border-b-0 absolute bottom-0 shadow-[-4px_-4px_0px_#000_inset]" style="border-radius: 40px 40px 0 0;"></div>
                 </div>
 
                 <div id="lanes-container" class="flex-1 flex h-full relative">
                 </div>
 
-                <div id="chicken-wrapper" class="absolute bottom-8 sm:bottom-12 z-20" style="left: 0; width: 3rem; text-align: center;">
-                    <div id="chicken-sprite" class="w-16 h-16 sm:w-20 sm:h-20 drop-shadow-xl inline-block" style="filter: drop-shadow(0px 10px 5px rgba(0,0,0,0.5)); transform-origin: bottom center;">
+                <div id="chicken-wrapper" class="absolute bottom-8 sm:bottom-12 z-20 flex justify-center" style="left: 0; width: 6rem;">
+                    <div id="chicken-sprite" class="w-20 h-20 sm:w-24 sm:h-24 drop-shadow-xl inline-block" style="filter: drop-shadow(0px 10px 5px rgba(0,0,0,0.5)); transform-origin: bottom center;">
                         <img id="chicken-img" src="assets/animation/Chicken.svg" alt="Chicken" class="w-full h-full object-contain -scale-x-100">
                     </div>
                 </div>
@@ -109,83 +91,86 @@
         </div>
     </main>
 
-    <div id="finish-overlay" class="fixed inset-0 z-40 hidden items-center justify-center bg-charcoal/80 backdrop-blur-md px-4">
-        <div class="w-full max-w-lg rounded-card border border-gray-green/20 bg-charcoal/90/95 shadow-soft overflow-hidden">
-            <div class="p-6 sm:p-8 border-b border-gray-green/20 bg-gradient-to-br from-off-white/15 via-charcoal/90 to-vibrant-red/10 animate-finish-glow">
-                <div class="flex items-center gap-3 mb-3">
-                    <img src="assets/animation/Chicken.svg" alt="Finish" class="w-10 h-10">
+    <div id="finish-overlay" class="fixed inset-0 z-40 hidden items-center justify-center bg-neo-black/60 px-4">
+        <div class="w-full max-w-lg bg-neo-white border-8 border-neo-black shadow-neo-hover transform rotate-1 transition-transform">
+            <div class="p-6 sm:p-8 border-b-4 border-neo-black bg-neo-yellow animate-finish-glow">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="border-4 border-neo-black bg-neo-white p-2 shadow-neo-sm transform -rotate-3">
+                        <img src="assets/animation/Chicken.svg" alt="Finish" class="w-12 h-12">
+                    </div>
                     <div>
-                        <p class="text-[10px] uppercase tracking-widest font-bold text-gray-green font-bold">Run Complete</p>
-                        <h2 class="text-[32px] font-black text-white">Chicken Pop Finished</h2>
+                        <p class="text-sm font-black uppercase tracking-widest text-neo-black border-2 border-neo-black inline-block px-2 bg-neo-white mb-1">Run Complete</p>
+                        <h2 class="text-4xl font-black text-neo-black uppercase tracking-tighter" style="-webkit-text-stroke: 1px black; color: white;">Chicken <span class="text-neo-red" style="-webkit-text-stroke: 0px">Finished</span></h2>
                     </div>
                 </div>
-                <p class="text-off-white text-sm sm:text-base">The chicken reached the end without getting hurt.</p>
+                <p class="text-neo-black font-bold text-lg border-l-4 border-neo-black pl-3">The chicken reached the end without getting hurt.</p>
             </div>
-            <div class="p-6 sm:p-8 space-y-4">
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="rounded-nested bg-charcoal/80/80 border border-gray-green/20 p-4">
-                        <div class="text-[10px] items-center uppercase tracking-widest font-bold text-gray-green font-bold mb-1">Final cash earned</div>
-                        <div id="finish-earned" class="text-[32px] font-black text-vibrant-red font-mono">$0.00</div>
+            <div class="p-6 sm:p-8 space-y-6 bg-neo-cream">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="bg-neo-white border-4 border-neo-black p-4 shadow-neo-sm">
+                        <div class="text-xs uppercase font-black text-neo-black mb-2 tracking-wider">Final cash earned</div>
+                        <div id="finish-earned" class="text-3xl font-black text-neo-red">$0.00</div>
                     </div>
-                    <div class="rounded-nested bg-charcoal/80/80 border border-gray-green/20 p-4">
-                        <div class="text-[10px] items-center uppercase tracking-widest font-bold text-gray-green font-bold mb-1">Total balance</div>
-                        <div id="finish-balance" class="text-[32px] font-black text-white font-mono">$0.00</div>
+                    <div class="bg-neo-black border-4 border-neo-black p-4 shadow-neo-sm">
+                        <div class="text-xs uppercase font-black text-neo-white mb-2 tracking-wider">Total balance</div>
+                        <div id="finish-balance" class="text-3xl font-black text-neo-yellow">$0.00</div>
                     </div>
                 </div>
-                <button onclick="playAgainFromFinish()" class="w-full h-14 rounded-nested bg-vibrant-red text-white hover:bg-vibrant-red/90 text-slate-950 font-black text-lg transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+                <button onclick="playAgainFromFinish()" class="w-full h-16 bg-neo-red border-4 border-neo-black text-white font-black text-xl uppercase tracking-widest shadow-neo shadow-neo-black active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-100 hover:bg-neo-orange">
                     Play Again
                 </button>
             </div>
         </div>
     </div>
 
-    <footer class="bg-charcoal/80 border-t border-gray-green/20 p-4 shrink-0 z-20 shadow-soft">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row gap-4">
+    <footer class="bg-neo-white border-t-8 border-neo-black p-4 shrink-0 z-20 relative">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row gap-6">
 
-            <div class="flex-1 glass-panel rounded-nested p-3 flex flex-col justify-between gap-2">
-                <div class="flex justify-between text-xs text-gray-green font-semibold uppercase tracking-wider px-1">
-                    <span>Bet Amount</span>
-                    <span id="profit-preview" class="text-vibrant-red opacity-0 transition-opacity">Win: $0.00</span>
+            <div class="flex-1 bg-neo-cream border-4 border-neo-black p-4 shadow-neo flex flex-col justify-between gap-3 transform -rotate-1 relative">
+                <div class="absolute -top-3 -right-3 bg-neo-red border-4 border-neo-black px-2 py-1 transform rotate-6 max-w-max shadow-neo-sm z-10">
+                    <span id="profit-preview" class="text-white font-black uppercase tracking-widest text-xs opacity-0 transition-opacity">Win: $0.00</span>
+                </div>
+                <div class="flex justify-between items-center px-1">
+                    <span class="text-sm text-neo-black font-black uppercase tracking-widest bg-neo-white border-2 border-neo-black px-2 py-0.5 shadow-[2px_2px_0_#000]">Bet Amount</span>
                 </div>
 
-                <div class="flex bg-charcoal/90 rounded-lg p-1 border border-gray-green/20 h-12">
-                    <div class="flex items-center px-3 text-gray-green font-bold">$</div>
-                    <input type="number" id="bet-input" value="10.00" min="0.10" step="0.10" class="w-full bg-transparent text-white font-mono font-bold text-lg focus:outline-none" :disabled="isPlaying">
-                    <div class="flex gap-1 pr-1 py-1">
-                        <button onclick="adjustBet('half')" class="px-3 bg-charcoal/80 hover:bg-slate-700 text-off-white rounded font-semibold text-xs transition-colors disabled:opacity-50">/2</button>
-                        <button onclick="adjustBet('double')" class="px-3 bg-charcoal/80 hover:bg-slate-700 text-off-white rounded font-semibold text-xs transition-colors disabled:opacity-50">x2</button>
+                <div class="flex bg-neo-white border-4 border-neo-black shadow-neo-sm h-14 relative group">
+                    <div class="flex items-center px-3 text-neo-black bg-neo-yellow border-r-4 border-neo-black font-black text-xl">$</div>
+                    <input type="number" id="bet-input" value="10.00" min="0.10" step="0.10" class="w-full bg-transparent text-neo-black font-black text-xl focus:outline-none focus:bg-neo-yellow px-4 transition-colors disabled:opacity-50" :disabled="isPlaying">
+                    <div class="flex border-l-4 border-neo-black">
+                        <button onclick="adjustBet('half')" class="w-12 bg-neo-white border-r-4 border-neo-black hover:bg-neo-black hover:text-neo-white text-neo-black font-black text-sm transition-colors duration-100 disabled:opacity-50">/2</button>
+                        <button onclick="adjustBet('double')" class="w-12 bg-neo-white hover:bg-neo-black hover:text-neo-white text-neo-black font-black text-sm transition-colors duration-100 disabled:opacity-50">x2</button>
                     </div>
                 </div>
             </div>
 
-            <div class="flex-1 glass-panel rounded-nested p-3 flex flex-col justify-between gap-2">
-                <div class="flex justify-between text-xs text-gray-green font-semibold uppercase tracking-wider px-1">
-                    <span>Difficulty</span>
-                    <span id="risk-indicator" class="text-yellow-400">Low Risk</span>
+            <div class="flex-1 bg-neo-cream border-4 border-neo-black p-4 shadow-neo flex flex-col justify-between gap-3 transform rotate-1">
+                <div class="flex justify-between items-center px-1 border-b-2 border-neo-black pb-2">
+                    <span class="text-sm text-neo-black font-black uppercase tracking-widest">Difficulty</span>
+                    <span id="risk-indicator" class="text-neo-black bg-neo-white px-2 py-1 font-black shadow-[2px_2px_0_#000] border-2 border-neo-black uppercase tracking-wider text-xs">Low Risk</span>
                 </div>
-                <div class="flex bg-charcoal/90 rounded-lg p-1 border border-gray-green/20 h-12 relative">
-                    <div id="difficulty-slider" class="absolute top-1 bottom-1 left-1 bg-slate-700 rounded-md transition-all duration-300 ease-in-out w-[calc(25%-0.5rem)]"></div>
-
-                    <button onclick="setDifficulty('easy', 0)" class="diff-btn relative z-10 flex-1 text-sm font-bold text-white transition-colors duration-200">Easy</button>
-                    <button onclick="setDifficulty('medium', 1)" class="diff-btn relative z-10 flex-1 text-sm font-bold text-gray-green hover:text-white transition-colors duration-200">Medium</button>
-                    <button onclick="setDifficulty('hard', 2)" class="diff-btn relative z-10 flex-1 text-sm font-bold text-gray-green hover:text-white transition-colors duration-200">Hard</button>
-                    <button onclick="setDifficulty('hardcore', 3)" class="diff-btn relative z-10 flex-1 text-sm font-bold text-gray-green hover:text-white transition-colors duration-200">Hardcore</button>
+                <div class="flex h-14 relative gap-2 mt-1">
+                    <!-- Pure Neo-Brutalist Toggle styling later implemented via JS, base styles here -->
+                    <button onclick="setDifficulty('easy', 0)" class="diff-btn border-4 border-neo-black bg-neo-white hover:bg-neo-yellow hover:shadow-[2px_2px_0_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex-1 text-sm font-black uppercase tracking-wider text-neo-black transition-all duration-100 ease-linear">Easy</button>
+                    <button onclick="setDifficulty('medium', 1)" class="diff-btn border-4 border-neo-black bg-neo-black text-white hover:bg-neo-orange hover:text-neo-black flex-1 text-sm font-black uppercase tracking-wider transition-all duration-100 ease-linear">Medium</button>
+                    <button onclick="setDifficulty('hard', 2)" class="diff-btn border-4 border-neo-black bg-neo-black text-white hover:bg-neo-red hover:text-neo-white flex-1 text-sm font-black uppercase tracking-wider transition-all duration-100 ease-linear">Hard</button>
+                    <button onclick="setDifficulty('hardcore', 3)" class="diff-btn border-4 border-neo-black bg-neo-black text-white hover:bg-[#8B0000] hover:text-neo-white flex-1 text-sm font-black uppercase tracking-wider transition-all duration-100 ease-linear">Hardcore</button>
                 </div>
             </div>
 
-            <div class="flex-1 flex gap-2 h-[88px]">
-                <button id="btn-play" onclick="startGame()" class="w-full h-full bg-vibrant-red text-white hover:bg-vibrant-red/90 active:bg-vibrant-red/80 text-slate-950 font-black text-2xl rounded-nested transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)] transform hover:-translate-y-1 active:translate-y-0">
+            <div class="flex-1 flex gap-4 h-[110px] items-end">
+                <button id="btn-play" onclick="startGame()" class="w-full h-20 bg-neo-red border-4 border-neo-black text-white text-3xl font-black uppercase tracking-widest shadow-neo shadow-neo-black active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-100 hover:bg-neo-orange z-10 transform -rotate-1" style="display: block;">
                     PLAY
                 </button>
 
-                <div id="playing-controls" class="hidden w-full h-full flex gap-2">
-                    <button id="btn-cashout" onclick="cashOut()" class="flex-1 h-full bg-white text-charcoal border border-gray-green/30 hover:bg-off-white active:bg-gray-green/20 text-slate-950 rounded-nested transition-all shadow-soft flex flex-col items-center justify-center group disabled:opacity-50 disabled:cursor-not-allowed">
-                        <span class="text-xs font-bold uppercase tracking-wider opacity-80 mb-[-4px]">Cashout</span>
-                        <span id="cashout-amount" class="text-xl font-black font-mono group-hover:scale-105 transition-transform">$0.00</span>
+                <div id="playing-controls" class="w-full h-20 gap-4 disabled:opacity-50" style="display: none;">
+                    <button id="btn-cashout" onclick="cashOut()" class="flex-1 h-full bg-neo-white border-4 border-neo-black text-neo-black font-black text-xl uppercase tracking-widest shadow-neo shadow-neo-black active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-100 hover:bg-neo-yellow flex flex-col justify-center items-center disabled:opacity-50 disabled:translate-x-0 disabled:translate-y-0 disabled:shadow-neo disabled:cursor-not-allowed">
+                        <span class="text-xs uppercase tracking-widest mb-1 border-b-2 border-neo-black">Cashout</span>
+                        <span id="cashout-amount" class="text-2xl font-black drop-shadow-[1px_1px_0_#FFF]">$0.00</span>
                     </button>
-                    <button id="btn-next" onclick="takeStep()" class="flex-1 h-full bg-vibrant-red text-white hover:bg-vibrant-red/90 active:bg-vibrant-red/80 text-slate-950 font-black text-xl rounded-nested transition-all shadow-soft flex flex-col items-center justify-center group disabled:opacity-50 disabled:cursor-not-allowed">
-                        <span class="text-xs font-bold uppercase tracking-wider opacity-80 mb-[-4px]">Jump</span>
-                        <span id="next-multi-display" class="text-lg font-black font-mono bg-charcoal/20 px-2 rounded group-hover:scale-105 transition-transform">1.03x</span>
+                    <button id="btn-next" onclick="takeStep()" class="flex-1 h-full bg-neo-red border-4 border-neo-black text-white font-black text-xl uppercase tracking-widest shadow-neo shadow-neo-black active:translate-x-[4px] active:translate-y-[4px] active:shadow-none transition-all duration-100 hover:bg-neo-orange flex flex-col justify-center items-center disabled:opacity-50 disabled:translate-x-0 disabled:translate-y-0 disabled:shadow-neo disabled:cursor-not-allowed group">
+                        <span class="text-xs uppercase tracking-widest mb-1 border-b-2 border-white">Jump</span>
+                        <span id="next-multi-display" class="text-2xl font-black group-hover:scale-110 transition-transform">1.03x</span>
                     </button>
                 </div>
             </div>

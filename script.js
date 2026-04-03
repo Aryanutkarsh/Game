@@ -4,22 +4,22 @@
         // Match approximate values from typical crash games
         const GAME_DATA = {
             easy: {
-                name: 'Easy', risk: 'Low Risk', riskColor: 'text-vibrant-red',
+                name: 'Easy', risk: 'Low Risk', riskColor: 'bg-neo-white',
                 chance: 0.95, // 95% survival per step
                 multipliers: [1.03, 1.07, 1.12, 1.17, 1.23, 1.29, 1.36, 1.44, 1.53, 1.62]
             },
             medium: {
-                name: 'Medium', risk: 'Medium Risk', riskColor: 'text-yellow-400',
+                name: 'Medium', risk: 'Medium Risk', riskColor: 'bg-neo-yellow',
                 chance: 0.85, 
                 multipliers: [1.15, 1.33, 1.54, 1.78, 2.07, 2.40, 2.78, 3.23, 3.75, 4.36]
             },
             hard: {
-                name: 'Hard', risk: 'High Risk', riskColor: 'text-orange-500',
+                name: 'Hard', risk: 'High Risk', riskColor: 'bg-neo-orange',
                 chance: 0.70, 
                 multipliers: [1.39, 1.95, 2.73, 3.82, 5.35, 7.50, 10.50, 14.70, 20.58, 28.81]
             },
             hardcore: {
-                name: 'Hardcore', risk: 'Extreme Risk', riskColor: 'text-red-500',
+                name: 'Hardcore', risk: 'Extreme Risk', riskColor: 'bg-neo-red',
                 chance: 0.50, 
                 multipliers: [1.96, 3.84, 7.53, 14.76, 28.93, 56.70, 111.13, 217.82, 426.93, 836.78]
             }
@@ -96,24 +96,24 @@
             
             for (let i = 0; i < TOTAL_STEPS; i++) {
                 const lane = document.createElement('div');
-                lane.className = `flex-1 h-full lane-dashed-border relative flex justify-center items-center group transition-colors duration-300`;
+                lane.className = `flex-1 h-full border-r-4 border-neo-black relative flex justify-center items-center group transition-colors duration-100 bg-neo-white`;
                 lane.id = `lane-${i}`;
                 
                 // Multiplier Background Badge
                 const badge = document.createElement('div');
-                badge.className = `w-12 h-12 sm:w-16 sm:h-16 rounded-full border-4 border-gray-green/20/50 flex items-center justify-center bg-charcoal/80/50 shadow-inner transition-all duration-300`;
+                badge.className = `w-12 h-12 sm:w-16 sm:h-16 rounded-full border-4 border-neo-black flex items-center justify-center bg-neo-white shadow-neo-sm transition-all duration-100 z-20 relative`;
                 badge.id = `badge-${i}`;
                 
                 const text = document.createElement('span');
-                text.className = `font-mono font-bold text-gray-green text-xs sm:text-sm transition-colors`;
+                text.className = `font-black text-neo-black text-xs sm:text-sm transition-colors uppercase`;
                 text.innerText = `${multis[i]}x`;
                 text.id = `text-${i}`;
 
-                // Grates at the bottom
+                // Grates at the bottom (Redesigned as Neo-Brutalist vents)
                 const grate = document.createElement('div');
-                grate.className = 'absolute bottom-0 w-[80%] h-12 border-t-8 border-slate-900 rounded-t-full opacity-30 flex justify-evenly items-end pb-2 overflow-hidden';
-                for(let g=0; g<5; g++) {
-                    grate.innerHTML += `<div class="w-1.5 h-full bg-charcoal/90 rounded-t-sm"></div>`;
+                grate.className = 'absolute bottom-0 w-full h-12 border-t-4 border-neo-black bg-neo-yellow flex justify-evenly items-end pb-1 overflow-hidden z-10';
+                for(let g=0; g<3; g++) {
+                    grate.innerHTML += `<div class="w-2 sm:w-3 h-full border-l-4 border-r-4 border-neo-black bg-neo-white"></div>`;
                 }
 
                 badge.appendChild(text);
@@ -129,8 +129,8 @@
             
             // Toggle controls
             if (state.isPlaying) {
-                els.btnPlay.classList.add('hidden');
-                els.playingControls.classList.remove('hidden');
+                els.btnPlay.style.display = 'none';
+                els.playingControls.style.display = 'flex';
                 els.profitPreview.classList.add('opacity-100');
                 
                 // Update active buttons based on state
@@ -160,8 +160,8 @@
                 }
 
             } else {
-                els.btnPlay.classList.remove('hidden');
-                els.playingControls.classList.add('hidden');
+                els.btnPlay.style.display = 'block';
+                els.playingControls.style.display = 'none';
                 els.profitPreview.classList.remove('opacity-100');
                 
                 // Reset lane highlights
@@ -196,20 +196,27 @@
             const btns = document.querySelectorAll('.diff-btn');
             btns.forEach((btn, i) => {
                 if (i === index) {
-                    btn.classList.remove('text-gray-green');
-                    btn.classList.add('text-off-white');
+                    btn.classList.add('bg-neo-red', 'text-neo-white', 'shadow-[inset_4px_4px_0_rgba(0,0,0,0.5)]');
+                    btn.classList.remove('bg-neo-white', 'bg-neo-black', 'text-neo-black');
                 } else {
-                    btn.classList.add('text-gray-green');
-                    btn.classList.remove('text-off-white');
+                    btn.classList.remove('bg-neo-red', 'text-neo-white', 'shadow-[inset_4px_4px_0_rgba(0,0,0,0.5)]');
+                    btn.classList.add('bg-neo-black', 'text-white');
+                    if(i===0) btn.classList.replace('bg-neo-black', 'bg-neo-white'); // Easy starts white usually, text handles via index.html default classes 
+                    // Let's reset purely to the default html classes by resetting className to a base then re-applying. Actually, let's keep it simple:
                 }
             });
-
-            // Move slider
-            els.diffSlider.style.transform = `translateX(${index * 100}%)`;
+            // Pure reset approach:
+            btns[0].className = `diff-btn border-4 border-neo-black ${index===0 ? 'bg-neo-red text-white shadow-[inset_4px_4px_0_rgba(0,0,0,0.5)]' : 'bg-neo-white text-neo-black'} hover:bg-neo-yellow active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex-1 text-sm font-black uppercase tracking-wider transition-all duration-100 ease-linear`;
+            btns[1].className = `diff-btn border-4 border-neo-black ${index===1 ? 'bg-neo-red text-white shadow-[inset_4px_4px_0_rgba(0,0,0,0.5)]' : 'bg-neo-black text-white'} hover:bg-neo-orange hover:text-neo-black flex-1 text-sm font-black uppercase tracking-wider transition-all duration-100 ease-linear`;
+            btns[2].className = `diff-btn border-4 border-neo-black ${index===2 ? 'bg-neo-red text-white shadow-[inset_4px_4px_0_rgba(0,0,0,0.5)]' : 'bg-neo-black text-white'} hover:bg-neo-red hover:text-neo-white flex-1 text-sm font-black uppercase tracking-wider transition-all duration-100 ease-linear`;
+            btns[3].className = `diff-btn border-4 border-neo-black ${index===3 ? 'bg-neo-red text-white shadow-[inset_4px_4px_0_rgba(0,0,0,0.5)]' : 'bg-neo-black text-white'} hover:bg-[#8B0000] hover:text-neo-white flex-1 text-sm font-black uppercase tracking-wider transition-all duration-100 ease-linear`;
+            
+            // Move slider - removed since we use raw states now in brutalism
+            if(els.diffSlider) els.diffSlider.style.display = 'none'; 
             
             // Update Risk Indicator text
             const diffData = GAME_DATA[level];
-            els.riskIndicator.className = `${diffData.riskColor}`;
+            els.riskIndicator.className = `text-neo-black px-2 py-1 font-black shadow-[2px_2px_0_#000] border-2 border-neo-black uppercase tracking-wider text-xs ${diffData.riskColor}`;
             els.riskIndicator.innerText = diffData.risk;
 
             renderLanes();
@@ -227,9 +234,12 @@
         function showMessage(msg, type) {
             els.statusMessage.innerText = msg;
             
-            if (type === 'win') els.statusMessage.className = 'text-[32px] font-black tracking-widest drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] text-vibrant-red animate-win';
-            else if (type === 'lose') els.statusMessage.className = 'text-[32px] font-black tracking-widest drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] text-red-500';
+            if (type === 'win') els.statusMessage.className = 'text-7xl font-black uppercase tracking-tighter text-neo-yellow drop-shadow-[4px_4px_0_#FFF] animate-win';
+            else if (type === 'lose') els.statusMessage.className = 'text-7xl font-black uppercase tracking-tighter text-neo-red drop-shadow-[4px_4px_0_#FFF]';
             
+            els.statusMessage.style.webkitTextStroke = "3px black";
+            els.statusMessage.style.textShadow = "6px 6px 0px #000";
+
             els.statusOverlay.classList.remove('opacity-0');
             setTimeout(() => {
                 els.statusOverlay.classList.add('opacity-0');
@@ -286,50 +296,62 @@
             
             if(!badge || !text) return;
 
-            badge.className = `w-12 h-12 sm:w-16 sm:h-16 rounded-full border-4 flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] transform`;
-            text.className = `font-mono font-bold transition-all duration-500 text-xs sm:text-sm`;
-            lane.style.backgroundColor = 'transparent';
+            badge.className = `w-12 h-12 sm:w-16 sm:h-16 rounded-full border-4 flex items-center justify-center transition-all duration-100 ease-linear transform z-20 relative`;
+            text.className = `font-black uppercase transition-all duration-100 text-xs sm:text-sm`;
+            lane.style.backgroundColor = '';
 
             if (status === 'active') {
-                badge.classList.add('border-vibrant-red', 'bg-vibrant-red/20', 'shadow-soft', 'scale-110');
-                text.classList.add('text-vibrant-red', 'scale-110');
-                lane.style.backgroundColor = 'rgba(16, 185, 129, 0.08)';
+                badge.classList.add('border-neo-black', 'bg-neo-yellow', 'shadow-neo-sm', 'scale-110');
+                text.classList.add('text-neo-black');
+                lane.classList.add('bg-neo-yellow');
+                lane.classList.remove('bg-neo-white', 'bg-neo-orange', 'bg-neo-red');
             } else if (status === 'passed') {
-                badge.classList.add('border-vibrant-red/80', 'bg-charcoal/80');
-                text.classList.add('text-vibrant-red');
+                badge.classList.add('border-neo-black', 'bg-neo-orange', 'shadow-[2px_2px_0_#000]');
+                text.classList.add('text-neo-white');
+                lane.classList.add('bg-neo-cream', 'opacity-90');
+                lane.classList.remove('bg-neo-white', 'bg-neo-yellow', 'bg-neo-red');
             } else if (status === 'died') {
-                badge.classList.add('border-red-500', 'bg-red-500/30', 'shadow-[0_0_25px_rgba(239,68,68,0.8)]', 'scale-110');
-                text.classList.add('text-red-400');
-                lane.style.backgroundColor = 'rgba(239, 68, 68, 0.15)';
+                badge.classList.add('border-neo-black', 'bg-neo-red', 'shadow-neo', 'scale-125', 'rotate-6');
+                text.classList.add('text-neo-white');
+                lane.classList.add('bg-neo-red');
+                lane.classList.remove('bg-neo-white', 'bg-neo-yellow', 'bg-neo-cream');
             } else {
                 // Idle
-                badge.classList.add('border-gray-green/20/50', 'bg-charcoal/80/50');
-                text.classList.add('text-gray-green');
+                badge.classList.add('border-neo-black', 'bg-neo-white');
+                text.classList.add('text-neo-black');
+                lane.classList.add('bg-neo-white');
+                lane.classList.remove('bg-neo-yellow', 'bg-neo-cream', 'bg-neo-red');
             }
         }
 
         function calculateChickenPosition(stepIndex) {
-            const startZoneWidth = document.querySelector('.w-16.sm\\:w-24').offsetWidth;
+            const startZoneInfo = document.getElementById('start-zone');
+            const startZoneWidth = startZoneInfo ? startZoneInfo.offsetWidth : 96; // fallback 6rem
+            
             if (stepIndex === -1) {
-                return `${startZoneWidth / 2}px`; // Center of start zone
+                // Return exactly half the width of the start zone, minus half the chicken width to perfectly center 
+                const wrapperWidth = els.chickenWrapper.offsetWidth;
+                return `${(startZoneWidth / 2) - (wrapperWidth / 2)}px`;
             }
             
             const lane = document.getElementById(`lane-${stepIndex}`);
             if(!lane) return '0px';
             
-            // X position: Start zone width + (lane index * lane width) + (half lane width)
+            // X position: Start zone width + (lane index * lane width) + (half lane width) - (half chicken width)
             const laneWidth = lane.offsetWidth;
-            return `${startZoneWidth + (stepIndex * laneWidth) + (laneWidth / 2)}px`;
+            const targetCenter = startZoneWidth + (stepIndex * laneWidth) + (laneWidth / 2);
+            const wrapperWidth = els.chickenWrapper.offsetWidth;
+            return `${targetCenter - (wrapperWidth / 2)}px`;
         }
 
         function setChickenPosition(stepIndex) {
             const position = calculateChickenPosition(stepIndex);
-            els.chickenWrapper.style.transform = `translate3d(${position}, 0, 0) translateX(-50%)`;
+            els.chickenWrapper.style.transform = `translate3d(${position}, 0, 0)`;
         }
 
         function resetChicken() {
             els.chickenWrapper.style.transition = 'none'; // Snap back
-            els.chickenSprite.className = 'w-16 h-16 sm:w-20 sm:h-20 drop-shadow-xl inline-block'; // Reset classes
+            els.chickenSprite.className = 'w-20 h-20 sm:w-24 sm:h-24 drop-shadow-xl inline-block'; // Reset classes
             els.chickenSprite.style.transform = '';
             els.chickenSprite.style.opacity = '1';
             els.chickenSprite.style.filter = 'drop-shadow(0px 10px 5px rgba(0,0,0,0.5))';
