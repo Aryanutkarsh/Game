@@ -69,7 +69,10 @@
             statusMessage: document.getElementById('status-message'),
             finishOverlay: document.getElementById('finish-overlay'),
             finishEarned: document.getElementById('finish-earned'),
-            finishBalance: document.getElementById('finish-balance')
+            finishBalance: document.getElementById('finish-balance'),
+            balanceAlertOverlay: document.getElementById('balance-alert-overlay'),
+            balanceAlertMessage: document.getElementById('balance-alert-message'),
+            balanceAlertFixButton: document.getElementById('balance-alert-fix')
         };
 
         // --- Initialization ---
@@ -87,7 +90,35 @@
             els.betInput.addEventListener('blur', () => {
                 els.betInput.value = state.bet.toFixed(2);
             });
+
+            window.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    closeBalanceAlert(false);
+                }
+            });
         }
+
+        function showBalanceAlert(message) {
+            if (!els.balanceAlertOverlay || !els.balanceAlertMessage) return;
+            els.balanceAlertMessage.innerText = message;
+            els.balanceAlertOverlay.classList.remove('hidden');
+            els.balanceAlertOverlay.classList.add('flex');
+            if (els.balanceAlertFixButton) {
+                setTimeout(() => els.balanceAlertFixButton.focus(), 20);
+            }
+        }
+
+        function closeBalanceAlert(focusBet = false) {
+            if (!els.balanceAlertOverlay) return;
+            els.balanceAlertOverlay.classList.add('hidden');
+            els.balanceAlertOverlay.classList.remove('flex');
+            if (focusBet) {
+                els.betInput.focus();
+                els.betInput.select();
+            }
+        }
+
+        window.closeBalanceAlert = closeBalanceAlert;
 
         // --- UI Rendering & Updates ---
         function renderLanes() {
@@ -367,8 +398,13 @@
         // --- Core Game Loop ---
 
         function startGame() {
-            if (state.balance < state.bet || state.bet <= 0) {
-                alert("Invalid bet amount or insufficient balance.");
+            if (state.bet <= 0) {
+                showBalanceAlert('Enter a valid bet greater than $0.00 before starting.');
+                return;
+            }
+
+            if (state.balance < state.bet) {
+                showBalanceAlert(`Insufficient balance. Current balance: $${state.balance.toFixed(2)}. Reduce your bet to continue.`);
                 return;
             }
 

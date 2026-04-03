@@ -123,6 +123,22 @@
         </div>
     </div>
 
+    <div id="balance-alert-overlay" class="fixed inset-0 z-50 hidden items-center justify-center bg-neo-black/70 px-4" role="dialog" aria-modal="true" aria-labelledby="balance-alert-title" onclick="closeBalanceAlert(false)">
+        <div class="w-full max-w-md bg-neo-white border-8 border-neo-black shadow-neo-hover transform -rotate-1" onclick="event.stopPropagation()">
+            <div class="p-5 border-b-4 border-neo-black bg-neo-red text-neo-white">
+                <p class="text-xs font-black uppercase tracking-widest inline-block border-2 border-neo-black bg-neo-black px-2 py-1">Warning</p>
+                <h3 id="balance-alert-title" class="mt-3 text-3xl font-black uppercase tracking-tighter" style="-webkit-text-stroke: 1px black;">Not Enough Balance</h3>
+            </div>
+            <div class="p-6 bg-neo-cream">
+                <p id="balance-alert-message" class="text-lg font-bold text-neo-black border-l-4 border-neo-black pl-3">Your current balance is too low for this bet.</p>
+                <div class="mt-6 flex gap-3">
+                    <button id="balance-alert-fix" onclick="closeBalanceAlert(true)" class="flex-1 h-14 bg-neo-yellow border-4 border-neo-black text-neo-black font-black uppercase tracking-wider shadow-neo-sm hover:bg-neo-white active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-100">Fix Bet</button>
+                    <button onclick="closeBalanceAlert(false)" class="flex-1 h-14 bg-neo-black border-4 border-neo-black text-neo-white font-black uppercase tracking-wider shadow-neo-sm hover:bg-neo-red active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-100">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <footer class="bg-neo-white border-t-8 border-neo-black p-4 shrink-0 z-20 relative">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row gap-6">
 
