@@ -15,8 +15,8 @@
             },
             hardcore: {
                 name: 'Hardcore', risk: 'Extreme Risk', riskColor: 'bg-neo-red',
-                chance: 0.50, 
-                multipliers: [1.96, 3.84, 7.53, 14.76, 28.93, 56.70, 111.13, 217.82, 426.93, 836.78]
+                chance: [0.85, 0.80, 0.75, 0.70, 0.65, 0.60, 0.55, 0.50, 0.45, 0.40], 
+                multipliers: [1.12, 1.44, 1.95, 2.70, 4.30, 6.80, 12.50, 25.00, 55.00, 140.00]
             }
         };
 
@@ -493,7 +493,8 @@
             sounds.reward.currentTime = 0;
             sounds.reward.play().catch(() => {});
 
-            const survivalChance = GAME_DATA[state.difficulty].chance;
+            const chanceData = GAME_DATA[state.difficulty].chance;
+            const survivalChance = Array.isArray(chanceData) ? chanceData[nextStep] : chanceData;
             const roll = Math.random();
             const survives = roll <= survivalChance;
 
