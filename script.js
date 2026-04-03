@@ -329,24 +329,22 @@
             const startZoneWidth = startZoneInfo ? startZoneInfo.offsetWidth : 96; // fallback 6rem
             
             if (stepIndex === -1) {
-                // Return exactly half the width of the start zone, minus half the chicken width to perfectly center 
-                const wrapperWidth = els.chickenWrapper.offsetWidth;
-                return `${(startZoneWidth / 2) - (wrapperWidth / 2)}px`;
+                // Return center of the start zone, moved slightly ahead to sit better in the door
+                return `${(startZoneWidth / 2) + 12}px`;
             }
             
             const lane = document.getElementById(`lane-${stepIndex}`);
             if(!lane) return '0px';
             
-            // X position: Start zone width + (lane index * lane width) + (half lane width) - (half chicken width)
+            // X position: Start zone width + (lane index * lane width) + (half lane width)
             const laneWidth = lane.offsetWidth;
             const targetCenter = startZoneWidth + (stepIndex * laneWidth) + (laneWidth / 2);
-            const wrapperWidth = els.chickenWrapper.offsetWidth;
-            return `${targetCenter - (wrapperWidth / 2)}px`;
+            return `${targetCenter}px`;
         }
 
         function setChickenPosition(stepIndex) {
             const position = calculateChickenPosition(stepIndex);
-            els.chickenWrapper.style.transform = `translate3d(${position}, 0, 0)`;
+            els.chickenWrapper.style.transform = `translate3d(${position}, 0, 0) translateX(-50%)`;
         }
 
         function resetChicken() {
