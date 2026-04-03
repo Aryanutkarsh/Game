@@ -1,0 +1,87 @@
+        /* Custom Animations */
+        @keyframes hop {
+            /* Squash before jump */
+            0% { transform: translateY(0) scale(1.1, 0.9); }
+            /* Stretch upwards */
+            30% { transform: translateY(-60px) scale(0.9, 1.1) rotate(5deg); }
+            /* Peak */
+            50% { transform: translateY(-70px) scale(1) rotate(15deg); }
+            /* Stretch downwards */
+            80% { transform: translateY(-10px) scale(0.95, 1.05) rotate(0deg); }
+            /* Squash on land */
+            90% { transform: translateY(0) scale(1.2, 0.8); }
+            /* Return to normal */
+            100% { transform: translateY(0) scale(1); }
+        }
+
+        @keyframes squash {
+            0% { transform: scale(1) translateY(0); filter: brightness(1); }
+            50% { transform: scale(1.1) translateY(-10px); filter: brightness(1.5) sepia(100%) hue-rotate(-50deg) saturate(300%); }
+            100% { transform: scale(1) translateY(0); filter: brightness(0.6) drop-shadow(0px 0px 10px rgba(255,50,0,0.5)); }
+        }
+
+        @keyframes winPulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        @keyframes fireFlicker {
+            0%, 100% { transform: translateY(0) scale(1); filter: saturate(1.1) brightness(1); }
+            25% { transform: translateY(-6px) scale(1.02); filter: saturate(1.25) brightness(1.1); }
+            50% { transform: translateY(3px) scale(0.98); filter: saturate(1.4) brightness(1.2); }
+            75% { transform: translateY(-4px) scale(1.03); filter: saturate(1.2) brightness(1.05); }
+        }
+
+        @keyframes finishGlow {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.03); opacity: 0.92; }
+        }
+
+        .animate-hop {
+            animation: hop 0.58s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .animate-squash {
+            animation: squash 0.6s ease-out forwards;
+        }
+
+        .animate-win {
+            animation: winPulse 1s ease-out;
+        }
+
+        .animate-fire {
+            animation: fireFlicker 1.35s ease-in-out infinite;
+        }
+
+        .animate-finish-glow {
+            animation: finishGlow 2s ease-in-out infinite;
+        }
+
+        /* Hide scrollbar for a cleaner app look */
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+
+        /* Game specific styling */
+        .lane-dashed-border {
+            border-left: 2px dashed rgba(148, 163, 184, 0.2);
+        }
+        
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Character positioning transition */
+        #chicken-wrapper {
+            left: 0;
+            transform: translate3d(0, 0, 0) translateX(-50%);
+            transition: transform 0.58s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: transform;
+        }
+
+        #fire-effect {
+            pointer-events: none;
+            mix-blend-mode: screen;
+            filter: drop-shadow(0 0 22px rgba(255, 120, 0, 0.45));
+        }
