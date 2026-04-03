@@ -13,11 +13,6 @@
                 chance: 0.85, 
                 multipliers: [1.15, 1.33, 1.54, 1.78, 2.07, 2.40, 2.78, 3.23, 3.75, 4.36]
             },
-            hard: {
-                name: 'Hard', risk: 'High Risk', riskColor: 'bg-neo-orange',
-                chance: 0.70, 
-                multipliers: [1.39, 1.95, 2.73, 3.82, 5.35, 7.50, 10.50, 14.70, 20.58, 28.81]
-            },
             hardcore: {
                 name: 'Hardcore', risk: 'Extreme Risk', riskColor: 'bg-neo-red',
                 chance: 0.50, 
@@ -40,12 +35,29 @@
         // --- Sounds ---
         const sounds = {
             bgMusic: new Audio('game_music/bg-muisc.mp3'),
-            bombDrop: new Audio('game_music/bomd-drop.wav'),
+            button: new Audio('game_music/button.mp3'),
+            money: new Audio('game_music/money.mp3'),
             fire: new Audio('game_music/fire.wav'),
             reward: new Audio('game_music/reward.wav')
         };
         sounds.bgMusic.loop = true;
         sounds.bgMusic.volume = 0.4;
+
+        let moneySoundTimeout = null;
+        function playMoneySound() {
+            if (moneySoundTimeout) clearTimeout(moneySoundTimeout);
+            sounds.money.currentTime = 0;
+            sounds.money.play().catch(() => {});
+            moneySoundTimeout = setTimeout(() => {
+                sounds.money.pause();
+                sounds.money.currentTime = 0;
+            }, 5000);
+        }
+
+        function playButtonClick() {
+            sounds.button.currentTime = 0;
+            sounds.button.play().catch(() => {});
+        }
 
         // --- DOM Elements ---
         const els = {
@@ -54,6 +66,7 @@
             profitPreview: document.getElementById('profit-preview'),
             lanesContainer: document.getElementById('lanes-container'),
             explosionEffect: document.getElementById('explosion-effect'),
+            moneyEffect: document.getElementById('money-effect'),
             chickenWrapper: document.getElementById('chicken-wrapper'),
             chickenSprite: document.getElementById('chicken-sprite'),
             chickenImg: document.getElementById('chicken-img'),
@@ -182,6 +195,7 @@
         }
 
         function setDifficulty(level, index) {
+            playButtonClick();
             if (state.isPlaying) {
                 // Reset the game/cashout automatically if difficulty is toggled during play
                 cashOut(); 
@@ -208,8 +222,7 @@
             // Pure reset approach:
             btns[0].className = `diff-btn border-4 border-neo-black ${index===0 ? 'bg-neo-red text-white shadow-[inset_4px_4px_0_rgba(0,0,0,0.5)]' : 'bg-neo-white text-neo-black'} hover:bg-neo-yellow active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex-1 text-sm font-black uppercase tracking-wider transition-all duration-100 ease-linear`;
             btns[1].className = `diff-btn border-4 border-neo-black ${index===1 ? 'bg-neo-red text-white shadow-[inset_4px_4px_0_rgba(0,0,0,0.5)]' : 'bg-neo-black text-white'} hover:bg-neo-orange hover:text-neo-black flex-1 text-sm font-black uppercase tracking-wider transition-all duration-100 ease-linear`;
-            btns[2].className = `diff-btn border-4 border-neo-black ${index===2 ? 'bg-neo-red text-white shadow-[inset_4px_4px_0_rgba(0,0,0,0.5)]' : 'bg-neo-black text-white'} hover:bg-neo-red hover:text-neo-white flex-1 text-sm font-black uppercase tracking-wider transition-all duration-100 ease-linear`;
-            btns[3].className = `diff-btn border-4 border-neo-black ${index===3 ? 'bg-neo-red text-white shadow-[inset_4px_4px_0_rgba(0,0,0,0.5)]' : 'bg-neo-black text-white'} hover:bg-[#8B0000] hover:text-neo-white flex-1 text-sm font-black uppercase tracking-wider transition-all duration-100 ease-linear`;
+            btns[2].className = `diff-btn border-4 border-neo-black ${index===2 ? 'bg-neo-red text-white shadow-[inset_4px_4px_0_rgba(0,0,0,0.5)]' : 'bg-neo-black text-white'} hover:bg-[#8B0000] hover:text-neo-white flex-1 text-sm font-black uppercase tracking-wider transition-all duration-100 ease-linear`;
             
             // Move slider - removed since we use raw states now in brutalism
             if(els.diffSlider) els.diffSlider.style.display = 'none'; 
@@ -224,6 +237,7 @@
         }
 
         function adjustBet(action) {
+            playButtonClick();
             if (state.isPlaying) return;
             if (action === 'half') state.bet = Math.max(0.10, state.bet / 2);
             if (action === 'double') state.bet = Math.min(state.balance, state.bet * 2);
@@ -261,11 +275,50 @@
         }
 
         function playAgainFromFinish() {
+            playButtonClick();
             hideFinishScreen();
             startGame();
         }
 
         let explosionTimeout;
+        let moneyTimeout;
+        let idleTimer = null;
+
+        function clearIdleTimer() {
+            if (idleTimer) {
+                clearTimeout(idleTimer);
+                idleTimer = null;
+            }
+        }
+
+        function startIdleTimer() {
+            clearIdleTimer();
+            if (!state.isPlaying || state.isAnimating) return;
+            if (state.currentStep >= TOTAL_STEPS - 1) return;
+
+            idleTimer = setTimeout(() => {
+                if (!state.isPlaying || state.isAnimating) return;
+                handleIdleDeath();
+            }, 3000);
+        }
+
+        function handleIdleDeath() {
+            state.isAnimating = true;
+            updateUI();
+            
+            highlightLane(state.currentStep, 'died');
+            
+            // Death Animation
+            els.chickenImg.src = 'assets/animation/fried.svg';
+            els.chickenSprite.classList.add('animate-squash');
+            
+            triggerExplosion(state.currentStep);
+            showMessage('KEEP MOVING!', 'lose');
+
+            setTimeout(() => {
+                finishGame(0);
+            }, 1500);
+        }
 
         function triggerExplosion(stepIndex) {
             // Full screen fade in of fire
@@ -286,6 +339,20 @@
                 els.explosionEffect.style.transition = 'opacity 0.5s ease-in';
                 els.explosionEffect.style.opacity = '0';
             }, 6000);
+        }
+
+        function triggerMoneyFalling() {
+            els.moneyEffect.style.transition = 'none';
+            void els.moneyEffect.offsetWidth; // Reflow
+            
+            els.moneyEffect.style.transition = 'opacity 0.2s ease-out';
+            els.moneyEffect.style.opacity = '1';
+            
+            if(moneyTimeout) clearTimeout(moneyTimeout);
+            moneyTimeout = setTimeout(() => {
+                els.moneyEffect.style.transition = 'opacity 0.5s ease-in';
+                els.moneyEffect.style.opacity = '0';
+            }, 5000);
         }
 
         // --- Visual Logic ---
@@ -367,6 +434,8 @@
         // --- Core Game Loop ---
 
         function startGame() {
+            playButtonClick();
+            clearIdleTimer();
             if (state.balance < state.bet || state.bet <= 0) {
                 alert("Invalid bet amount or insufficient balance.");
                 return;
@@ -377,8 +446,14 @@
                 clearTimeout(explosionTimeout);
                 explosionTimeout = null;
             }
+            if(moneyTimeout) {
+                clearTimeout(moneyTimeout);
+                moneyTimeout = null;
+            }
             els.explosionEffect.style.transition = 'none';
             els.explosionEffect.style.opacity = '0';
+            els.moneyEffect.style.transition = 'none';
+            els.moneyEffect.style.opacity = '0';
 
             // Start background music on first play
             if (sounds.bgMusic.paused) {
@@ -404,6 +479,8 @@
         }
 
         function takeStep() {
+            playButtonClick();
+            clearIdleTimer();
             if (!state.isPlaying || state.isAnimating) return;
             
             const nextStep = state.currentStep + 1;
@@ -443,18 +520,16 @@
                         // Reached the end without getting hurt
                         const winAmount = state.bet * state.currentMultiplier;
                         
-                        sounds.reward.currentTime = 0;
-                        sounds.reward.play().catch(() => {});
-                        setTimeout(() => { sounds.reward.currentTime = 0; sounds.reward.play().catch(() => {}); }, 150);
-                        setTimeout(() => { sounds.reward.currentTime = 0; sounds.reward.play().catch(() => {}); }, 300);
+                        playMoneySound();
                         
-                        triggerExplosion(state.currentStep);
+                        triggerMoneyFalling();
                         setTimeout(() => {
                             finishGame(winAmount, { showFinishScreen: true });
                         }, 300);
                     } else {
                         state.isAnimating = false;
                         updateUI();
+                        startIdleTimer();
                     }
 
                 } else {
@@ -477,6 +552,8 @@
         }
 
         function cashOut() {
+            playButtonClick();
+            clearIdleTimer();
             if (!state.isPlaying || state.isAnimating || state.currentStep < 0) return;
             
             state.isAnimating = true;
@@ -485,10 +562,9 @@
             const winAmount = state.bet * state.currentMultiplier;
             
             // Play reward sound
-            sounds.reward.currentTime = 0;
-            sounds.reward.play().catch(() => {});
+            playMoneySound();
 
-            triggerExplosion(state.currentStep);
+            triggerMoneyFalling();
             showMessage(`+ $${winAmount.toFixed(2)}`, 'win');
             
             // Visual flair
@@ -501,6 +577,7 @@
         }
 
         function finishGame(winAmount, options = {}) {
+            clearIdleTimer();
             state.balance += winAmount;
             state.isPlaying = false;
             state.isAnimating = false;

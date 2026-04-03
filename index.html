@@ -62,9 +62,6 @@
 
     <main class="flex-1 relative flex flex-col pt-8 pb-4 overflow-hidden z-10">
 
-        <div id="explosion-effect" class="fixed inset-0 z-[100] pointer-events-none flex items-center justify-center opacity-0 transition-opacity duration-300">
-            <dotlottie-player src="assets/animation/Fire%20-%20Feu%20-%20Fuego.lottie" background="transparent" speed="1" loop autoplay class="w-full h-full object-cover mix-blend-screen opacity-90 drop-shadow-[8px_8px_0px_#000]"></dotlottie-player>
-        </div>
 
         <div id="status-overlay" class="absolute inset-0 z-30 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-300">
             <div id="status-message" class="text-7xl font-black uppercase tracking-tighter" style="-webkit-text-stroke: 3px black; text-shadow: 6px 6px 0px #000;"></div>
@@ -153,8 +150,7 @@
                     <!-- Pure Neo-Brutalist Toggle styling later implemented via JS, base styles here -->
                     <button onclick="setDifficulty('easy', 0)" class="diff-btn border-4 border-neo-black bg-neo-white hover:bg-neo-yellow hover:shadow-[2px_2px_0_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none flex-1 text-sm font-black uppercase tracking-wider text-neo-black transition-all duration-100 ease-linear">Easy</button>
                     <button onclick="setDifficulty('medium', 1)" class="diff-btn border-4 border-neo-black bg-neo-black text-white hover:bg-neo-orange hover:text-neo-black flex-1 text-sm font-black uppercase tracking-wider transition-all duration-100 ease-linear">Medium</button>
-                    <button onclick="setDifficulty('hard', 2)" class="diff-btn border-4 border-neo-black bg-neo-black text-white hover:bg-neo-red hover:text-neo-white flex-1 text-sm font-black uppercase tracking-wider transition-all duration-100 ease-linear">Hard</button>
-                    <button onclick="setDifficulty('hardcore', 3)" class="diff-btn border-4 border-neo-black bg-neo-black text-white hover:bg-[#8B0000] hover:text-neo-white flex-1 text-sm font-black uppercase tracking-wider transition-all duration-100 ease-linear">Hardcore</button>
+                    <button onclick="setDifficulty('hardcore', 2)" class="diff-btn border-4 border-neo-black bg-neo-black text-white hover:bg-[#8B0000] hover:text-neo-white flex-1 text-sm font-black uppercase tracking-wider transition-all duration-100 ease-linear">Hardcore</button>
                 </div>
             </div>
 
@@ -177,6 +173,14 @@
 
         </div>
     </footer>
+
+    <div id="explosion-effect" class="fixed inset-0 z-[100] pointer-events-none flex items-center justify-center opacity-0 transition-opacity duration-300">
+        <dotlottie-player src="assets/animation/Fire%20-%20Feu%20-%20Fuego.lottie" background="transparent" speed="1" loop autoplay class="w-full h-full mix-blend-screen opacity-90 drop-shadow-[8px_8px_0px_#000]" style="transform: scaleX(3) scaleY(1.5);"></dotlottie-player>
+    </div>
+
+    <div id="money-effect" class="fixed inset-0 z-[100] pointer-events-none flex items-center justify-center opacity-0 transition-opacity duration-300">
+        <dotlottie-player src="assets/animation/money%20falling.lottie" background="transparent" speed="1" loop autoplay class="w-full h-full object-cover opacity-90 drop-shadow-[8px_8px_0px_#000]"></dotlottie-player>
+    </div>
 
     <!-- Game Logic -->
     <script src="script.js"></script>
