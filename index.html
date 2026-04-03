@@ -6,109 +6,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chicken Pop</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Custom Animations */
-        @keyframes hop {
-            0% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-40px) scale(1.1) rotate(5deg); }
-            100% { transform: translateY(0) scale(1) rotate(0deg); }
+    <script type="module" src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: { sans: ['Nunito', 'sans-serif'] },
+            colors: {
+              charcoal: '#171e19',
+              'vibrant-red': '#ca0013',
+              'gray-green': '#b7c6c2',
+              'off-white': '#eeebe3',
+              white: '#ffffff'
+            },
+            boxShadow: {
+              'soft': '0 20px 50px -12px rgba(0,0,0,0.08)'
+            },
+            borderRadius: {
+              'nested': '24px',
+              'card': '40px'
+            }
+          }
         }
-
-        @keyframes squash {
-            0% { transform: scale(1) translateY(0); opacity: 1; filter: grayscale(0%); }
-            50% { transform: scale(1.5, 0.2) translateY(20px); opacity: 0.8; filter: grayscale(50%) sepia(100%) hue-rotate(-50deg) saturate(500%); }
-            100% { transform: scale(2, 0) translateY(40px); opacity: 0; filter: grayscale(100%); }
+      }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: { sans: ['Nunito', 'sans-serif'] },
+            colors: {
+              charcoal: '#171e19',
+              'vibrant-red': '#ca0013',
+              'gray-green': '#b7c6c2',
+              'off-white': '#eeebe3',
+              white: '#ffffff'
+            },
+            boxShadow: {
+              'soft': '0 20px 50px -12px rgba(0,0,0,0.08)'
+            },
+            borderRadius: {
+              'nested': '24px',
+              'card': '40px'
+            }
+          }
         }
-
-        @keyframes winPulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-        }
-
-        @keyframes fireFlicker {
-            0%, 100% { transform: translateY(0) scale(1); filter: saturate(1.1) brightness(1); }
-            25% { transform: translateY(-6px) scale(1.02); filter: saturate(1.25) brightness(1.1); }
-            50% { transform: translateY(3px) scale(0.98); filter: saturate(1.4) brightness(1.2); }
-            75% { transform: translateY(-4px) scale(1.03); filter: saturate(1.2) brightness(1.05); }
-        }
-
-        @keyframes finishGlow {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.03); opacity: 0.92; }
-        }
-
-        .animate-hop {
-            animation: hop 0.4s ease-in-out forwards;
-        }
-
-        .animate-squash {
-            animation: squash 0.6s ease-out forwards;
-        }
-
-        .animate-win {
-            animation: winPulse 1s ease-out;
-        }
-
-        .animate-fire {
-            animation: fireFlicker 1.35s ease-in-out infinite;
-        }
-
-        .animate-finish-glow {
-            animation: finishGlow 2s ease-in-out infinite;
-        }
-
-        /* Hide scrollbar for a cleaner app look */
-        ::-webkit-scrollbar { width: 0px; background: transparent; }
-
-        /* Game specific styling */
-        .lane-dashed-border {
-            border-left: 2px dashed rgba(148, 163, 184, 0.2);
-        }
-        
-        .glass-panel {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        /* Character positioning transition */
-        #chicken-wrapper {
-            left: 0;
-            transform: translate3d(0, 0, 0) translateX(-50%);
-            transition: transform 0.58s cubic-bezier(0.22, 1, 0.36, 1);
-            will-change: transform;
-        }
-
-        #fire-effect {
-            pointer-events: none;
-            mix-blend-mode: screen;
-            filter: drop-shadow(0 0 22px rgba(255, 120, 0, 0.45));
-        }
-    </style>
+      }
+    </script>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
-<body class="bg-slate-950 text-slate-200 font-sans h-screen flex flex-col overflow-hidden selection:bg-emerald-500 selection:text-white">
+<body class="bg-charcoal text-off-white font-sans h-screen flex flex-col overflow-hidden selection:bg-vibrant-red text-white selection:text-white">
 
-    <header class="h-16 bg-slate-900 border-b border-slate-800 flex items-center justify-between px-6 shrink-0 z-20 shadow-md">
+    <header class="h-16 bg-charcoal/90 border-b border-gray-green/20 flex items-center justify-between px-6 shrink-0 z-20 shadow-soft">
         <div class="flex items-center gap-3">
             <img src="assets/animation/Chicken.svg" alt="Logo" class="w-8 h-8">
             <div>
-                <h1 class="font-black text-xl tracking-wider text-white italic">CHICKEN <span class="text-yellow-400">FRY</span></h1>
+                <h1 class="font-black text-[32px] tracking-wider text-white italic">CHICKEN <span class="text-yellow-400">FRY</span></h1>
             </div>
         </div>
 
         <div class="flex items-center gap-4">
-            <div class="bg-slate-800 rounded-lg p-1 flex items-center border border-slate-700 shadow-inner">
-                <div class="bg-slate-900 rounded px-4 py-1.5 flex items-center gap-2">
-                    <span class="text-emerald-400 font-bold">$</span>
+            <div class="bg-charcoal/80 rounded-lg p-1 flex items-center border border-gray-green/20 shadow-inner">
+                <div class="bg-charcoal/90 rounded px-4 py-1.5 flex items-center gap-2">
+                    <span class="text-vibrant-red font-bold">$</span>
                     <span id="balance-display" class="font-mono font-bold text-lg text-white">1000.00</span>
                 </div>
             </div>
         </div>
     </header>
 
-    <main class="flex-1 relative flex flex-col bg-slate-900 overflow-hidden">
+    <main class="flex-1 relative flex flex-col bg-charcoal/90 overflow-hidden">
+
+        <div id="explosion-effect" class="fixed inset-0 z-[100] pointer-events-none flex items-center justify-center opacity-0 transition-opacity duration-300">
+            <dotlottie-player src="assets/animation/Fire%20-%20Feu%20-%20Fuego.lottie" background="transparent" speed="1" loop autoplay class="w-full h-full object-cover mix-blend-screen opacity-90 drop-shadow-[0_0_20px_rgba(255,100,0,0.8)]"></dotlottie-player>
+        </div>
 
         <div id="status-overlay" class="absolute inset-0 z-30 flex items-center justify-center pointer-events-none opacity-0 transition-opacity duration-300">
             <div id="status-message" class="text-5xl font-black italic tracking-widest drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)]"></div>
@@ -116,21 +90,17 @@
 
         <div class="flex-1 w-full max-w-7xl mx-auto p-4 md:p-8 flex items-center justify-center relative">
 
-            <div class="w-full h-72 sm:h-96 bg-slate-800 rounded-xl relative flex border-b-[12px] border-slate-950 shadow-[inset_0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden">
+            <div class="w-full h-72 sm:h-96 bg-charcoal/80 rounded-nested relative flex border-b-[12px] border-gray-green/30 shadow-[inset_0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden">
 
-                <div class="w-16 sm:w-24 h-full relative flex items-end justify-center pb-6 shrink-0 bg-slate-800 border-r border-slate-700 z-10">
-                    <div class="w-12 sm:w-16 h-24 sm:h-32 bg-slate-950 rounded-t-full absolute bottom-0 shadow-[inset_0_10px_20px_rgba(0,0,0,0.8)] border border-slate-800 border-b-0"></div>
+                <div class="w-16 sm:w-24 h-full relative flex items-end justify-center pb-6 shrink-0 bg-charcoal/80 border-r border-gray-green/20 z-10">
+                    <div class="w-12 sm:w-16 h-24 sm:h-32 bg-charcoal rounded-t-full absolute bottom-0 shadow-[inset_0_10px_20px_rgba(0,0,0,0.8)] border border-gray-green/20 border-b-0"></div>
                 </div>
 
                 <div id="lanes-container" class="flex-1 flex h-full relative">
                 </div>
 
-                <div id="explosion-effect" class="fixed inset-0 z-50 pointer-events-none flex items-center justify-center opacity-0 transition-opacity duration-300">
-                    <dotlottie-player src="assets/animation/Fire%20-%20Feu%20-%20Fuego.lottie" background="transparent" speed="1" loop autoplay class="w-full h-full object-cover mix-blend-screen opacity-90 drop-shadow-[0_0_20px_rgba(255,100,0,0.8)]"></dotlottie-player>
-                </div>
-
-                <div id="chicken-wrapper" class="absolute bottom-6 sm:bottom-10 z-20" style="left: 0; width: 3rem; text-align: center;">
-                    <div id="chicken-sprite" class="w-12 h-12 sm:w-16 sm:h-16 drop-shadow-xl inline-block" style="filter: drop-shadow(0px 10px 5px rgba(0,0,0,0.5)); transform-origin: bottom center;">
+                <div id="chicken-wrapper" class="absolute bottom-8 sm:bottom-12 z-20" style="left: 0; width: 3rem; text-align: center;">
+                    <div id="chicken-sprite" class="w-16 h-16 sm:w-20 sm:h-20 drop-shadow-xl inline-block" style="filter: drop-shadow(0px 10px 5px rgba(0,0,0,0.5)); transform-origin: bottom center;">
                         <img id="chicken-img" src="assets/animation/Chicken.svg" alt="Chicken" class="w-full h-full object-contain -scale-x-100">
                     </div>
                 </div>
@@ -139,83 +109,83 @@
         </div>
     </main>
 
-    <div id="finish-overlay" class="fixed inset-0 z-40 hidden items-center justify-center bg-slate-950/80 backdrop-blur-md px-4">
-        <div class="w-full max-w-lg rounded-3xl border border-slate-700 bg-slate-900/95 shadow-[0_30px_80px_rgba(0,0,0,0.6)] overflow-hidden">
-            <div class="p-6 sm:p-8 border-b border-slate-700/80 bg-gradient-to-br from-amber-500/15 via-slate-900 to-emerald-500/10 animate-finish-glow">
+    <div id="finish-overlay" class="fixed inset-0 z-40 hidden items-center justify-center bg-charcoal/80 backdrop-blur-md px-4">
+        <div class="w-full max-w-lg rounded-card border border-gray-green/20 bg-charcoal/90/95 shadow-soft overflow-hidden">
+            <div class="p-6 sm:p-8 border-b border-gray-green/20 bg-gradient-to-br from-off-white/15 via-charcoal/90 to-vibrant-red/10 animate-finish-glow">
                 <div class="flex items-center gap-3 mb-3">
                     <img src="assets/animation/Chicken.svg" alt="Finish" class="w-10 h-10">
                     <div>
-                        <p class="text-xs uppercase tracking-[0.35em] text-slate-400 font-bold">Run Complete</p>
-                        <h2 class="text-3xl sm:text-4xl font-black text-white">Chicken Pop Finished</h2>
+                        <p class="text-[10px] uppercase tracking-widest font-bold text-gray-green font-bold">Run Complete</p>
+                        <h2 class="text-[32px] font-black text-white">Chicken Pop Finished</h2>
                     </div>
                 </div>
-                <p class="text-slate-300 text-sm sm:text-base">The chicken reached the end without getting hurt.</p>
+                <p class="text-off-white text-sm sm:text-base">The chicken reached the end without getting hurt.</p>
             </div>
             <div class="p-6 sm:p-8 space-y-4">
                 <div class="grid grid-cols-2 gap-3">
-                    <div class="rounded-2xl bg-slate-800/80 border border-slate-700 p-4">
-                        <div class="text-xs uppercase tracking-wider text-slate-400 font-bold mb-1">Final cash earned</div>
-                        <div id="finish-earned" class="text-3xl font-black text-emerald-400 font-mono">$0.00</div>
+                    <div class="rounded-nested bg-charcoal/80/80 border border-gray-green/20 p-4">
+                        <div class="text-[10px] items-center uppercase tracking-widest font-bold text-gray-green font-bold mb-1">Final cash earned</div>
+                        <div id="finish-earned" class="text-[32px] font-black text-vibrant-red font-mono">$0.00</div>
                     </div>
-                    <div class="rounded-2xl bg-slate-800/80 border border-slate-700 p-4">
-                        <div class="text-xs uppercase tracking-wider text-slate-400 font-bold mb-1">Total balance</div>
-                        <div id="finish-balance" class="text-3xl font-black text-white font-mono">$0.00</div>
+                    <div class="rounded-nested bg-charcoal/80/80 border border-gray-green/20 p-4">
+                        <div class="text-[10px] items-center uppercase tracking-widest font-bold text-gray-green font-bold mb-1">Total balance</div>
+                        <div id="finish-balance" class="text-[32px] font-black text-white font-mono">$0.00</div>
                     </div>
                 </div>
-                <button onclick="playAgainFromFinish()" class="w-full h-14 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-lg transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)]">
+                <button onclick="playAgainFromFinish()" class="w-full h-14 rounded-nested bg-vibrant-red text-white hover:bg-vibrant-red/90 text-slate-950 font-black text-lg transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)]">
                     Play Again
                 </button>
             </div>
         </div>
     </div>
 
-    <footer class="bg-slate-800 border-t border-slate-700 p-4 shrink-0 z-20 shadow-[0_-10px_20px_rgba(0,0,0,0.3)]">
+    <footer class="bg-charcoal/80 border-t border-gray-green/20 p-4 shrink-0 z-20 shadow-soft">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row gap-4">
 
-            <div class="flex-1 glass-panel rounded-xl p-3 flex flex-col justify-between gap-2">
-                <div class="flex justify-between text-xs text-slate-400 font-semibold uppercase tracking-wider px-1">
+            <div class="flex-1 glass-panel rounded-nested p-3 flex flex-col justify-between gap-2">
+                <div class="flex justify-between text-xs text-gray-green font-semibold uppercase tracking-wider px-1">
                     <span>Bet Amount</span>
-                    <span id="profit-preview" class="text-emerald-400 opacity-0 transition-opacity">Win: $0.00</span>
+                    <span id="profit-preview" class="text-vibrant-red opacity-0 transition-opacity">Win: $0.00</span>
                 </div>
 
-                <div class="flex bg-slate-900 rounded-lg p-1 border border-slate-700 h-12">
-                    <div class="flex items-center px-3 text-slate-400 font-bold">$</div>
+                <div class="flex bg-charcoal/90 rounded-lg p-1 border border-gray-green/20 h-12">
+                    <div class="flex items-center px-3 text-gray-green font-bold">$</div>
                     <input type="number" id="bet-input" value="10.00" min="0.10" step="0.10" class="w-full bg-transparent text-white font-mono font-bold text-lg focus:outline-none" :disabled="isPlaying">
                     <div class="flex gap-1 pr-1 py-1">
-                        <button onclick="adjustBet('half')" class="px-3 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded font-semibold text-xs transition-colors disabled:opacity-50">/2</button>
-                        <button onclick="adjustBet('double')" class="px-3 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded font-semibold text-xs transition-colors disabled:opacity-50">x2</button>
+                        <button onclick="adjustBet('half')" class="px-3 bg-charcoal/80 hover:bg-slate-700 text-off-white rounded font-semibold text-xs transition-colors disabled:opacity-50">/2</button>
+                        <button onclick="adjustBet('double')" class="px-3 bg-charcoal/80 hover:bg-slate-700 text-off-white rounded font-semibold text-xs transition-colors disabled:opacity-50">x2</button>
                     </div>
                 </div>
             </div>
 
-            <div class="flex-1 glass-panel rounded-xl p-3 flex flex-col justify-between gap-2">
-                <div class="flex justify-between text-xs text-slate-400 font-semibold uppercase tracking-wider px-1">
+            <div class="flex-1 glass-panel rounded-nested p-3 flex flex-col justify-between gap-2">
+                <div class="flex justify-between text-xs text-gray-green font-semibold uppercase tracking-wider px-1">
                     <span>Difficulty</span>
                     <span id="risk-indicator" class="text-yellow-400">Low Risk</span>
                 </div>
-                <div class="flex bg-slate-900 rounded-lg p-1 border border-slate-700 h-12 relative">
+                <div class="flex bg-charcoal/90 rounded-lg p-1 border border-gray-green/20 h-12 relative">
                     <div id="difficulty-slider" class="absolute top-1 bottom-1 left-1 bg-slate-700 rounded-md transition-all duration-300 ease-in-out w-[calc(25%-0.5rem)]"></div>
 
                     <button onclick="setDifficulty('easy', 0)" class="diff-btn relative z-10 flex-1 text-sm font-bold text-white transition-colors duration-200">Easy</button>
-                    <button onclick="setDifficulty('medium', 1)" class="diff-btn relative z-10 flex-1 text-sm font-bold text-slate-400 hover:text-white transition-colors duration-200">Medium</button>
-                    <button onclick="setDifficulty('hard', 2)" class="diff-btn relative z-10 flex-1 text-sm font-bold text-slate-400 hover:text-white transition-colors duration-200">Hard</button>
-                    <button onclick="setDifficulty('hardcore', 3)" class="diff-btn relative z-10 flex-1 text-sm font-bold text-slate-400 hover:text-white transition-colors duration-200">Hardcore</button>
+                    <button onclick="setDifficulty('medium', 1)" class="diff-btn relative z-10 flex-1 text-sm font-bold text-gray-green hover:text-white transition-colors duration-200">Medium</button>
+                    <button onclick="setDifficulty('hard', 2)" class="diff-btn relative z-10 flex-1 text-sm font-bold text-gray-green hover:text-white transition-colors duration-200">Hard</button>
+                    <button onclick="setDifficulty('hardcore', 3)" class="diff-btn relative z-10 flex-1 text-sm font-bold text-gray-green hover:text-white transition-colors duration-200">Hardcore</button>
                 </div>
             </div>
 
             <div class="flex-1 flex gap-2 h-[88px]">
-                <button id="btn-play" onclick="startGame()" class="w-full h-full bg-emerald-500 hover:bg-emerald-400 active:bg-emerald-600 text-slate-950 font-black text-2xl rounded-xl transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)] transform hover:-translate-y-1 active:translate-y-0">
+                <button id="btn-play" onclick="startGame()" class="w-full h-full bg-vibrant-red text-white hover:bg-vibrant-red/90 active:bg-vibrant-red/80 text-slate-950 font-black text-2xl rounded-nested transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(16,185,129,0.5)] transform hover:-translate-y-1 active:translate-y-0">
                     PLAY
                 </button>
 
                 <div id="playing-controls" class="hidden w-full h-full flex gap-2">
-                    <button id="btn-cashout" onclick="cashOut()" class="flex-1 h-full bg-amber-500 hover:bg-amber-400 active:bg-amber-600 text-slate-950 rounded-xl transition-all shadow-lg flex flex-col items-center justify-center group disabled:opacity-50 disabled:cursor-not-allowed">
+                    <button id="btn-cashout" onclick="cashOut()" class="flex-1 h-full bg-white text-charcoal border border-gray-green/30 hover:bg-off-white active:bg-gray-green/20 text-slate-950 rounded-nested transition-all shadow-soft flex flex-col items-center justify-center group disabled:opacity-50 disabled:cursor-not-allowed">
                         <span class="text-xs font-bold uppercase tracking-wider opacity-80 mb-[-4px]">Cashout</span>
                         <span id="cashout-amount" class="text-xl font-black font-mono group-hover:scale-105 transition-transform">$0.00</span>
                     </button>
-                    <button id="btn-next" onclick="takeStep()" class="flex-1 h-full bg-emerald-500 hover:bg-emerald-400 active:bg-emerald-600 text-slate-950 font-black text-xl rounded-xl transition-all shadow-lg flex flex-col items-center justify-center group disabled:opacity-50 disabled:cursor-not-allowed">
+                    <button id="btn-next" onclick="takeStep()" class="flex-1 h-full bg-vibrant-red text-white hover:bg-vibrant-red/90 active:bg-vibrant-red/80 text-slate-950 font-black text-xl rounded-nested transition-all shadow-soft flex flex-col items-center justify-center group disabled:opacity-50 disabled:cursor-not-allowed">
                         <span class="text-xs font-bold uppercase tracking-wider opacity-80 mb-[-4px]">Jump</span>
-                        <span id="next-multi-display" class="text-lg font-black font-mono bg-slate-950/20 px-2 rounded group-hover:scale-105 transition-transform">1.03x</span>
+                        <span id="next-multi-display" class="text-lg font-black font-mono bg-charcoal/20 px-2 rounded group-hover:scale-105 transition-transform">1.03x</span>
                     </button>
                 </div>
             </div>
@@ -224,466 +194,7 @@
     </footer>
 
     <!-- Game Logic -->
-    <script>
-        // --- Game Configuration & Data ---
-        const TOTAL_STEPS = 10;
-        
-        // Match approximate values from typical crash games
-        const GAME_DATA = {
-            easy: {
-                name: 'Easy', risk: 'Low Risk', riskColor: 'text-emerald-400',
-                chance: 0.95, // 95% survival per step
-                multipliers: [1.03, 1.07, 1.12, 1.17, 1.23, 1.29, 1.36, 1.44, 1.53, 1.62]
-            },
-            medium: {
-                name: 'Medium', risk: 'Medium Risk', riskColor: 'text-yellow-400',
-                chance: 0.85, 
-                multipliers: [1.15, 1.33, 1.54, 1.78, 2.07, 2.40, 2.78, 3.23, 3.75, 4.36]
-            },
-            hard: {
-                name: 'Hard', risk: 'High Risk', riskColor: 'text-orange-500',
-                chance: 0.70, 
-                multipliers: [1.39, 1.95, 2.73, 3.82, 5.35, 7.50, 10.50, 14.70, 20.58, 28.81]
-            },
-            hardcore: {
-                name: 'Hardcore', risk: 'Extreme Risk', riskColor: 'text-red-500',
-                chance: 0.50, 
-                multipliers: [1.96, 3.84, 7.53, 14.76, 28.93, 56.70, 111.13, 217.82, 426.93, 836.78]
-            }
-        };
-
-        // --- State Variables ---
-        let state = {
-            balance: 1000.00,
-            bet: 10.00,
-            difficulty: 'easy',
-            isPlaying: false,
-            currentStep: -1, // -1 is start zone, 0 is first lane
-            isAnimating: false,
-            currentMultiplier: 0,
-            showingFinishScreen: false
-        };
-
-        // --- DOM Elements ---
-        const els = {
-            balance: document.getElementById('balance-display'),
-            betInput: document.getElementById('bet-input'),
-            profitPreview: document.getElementById('profit-preview'),
-            lanesContainer: document.getElementById('lanes-container'),
-            fireEffect: document.getElementById('fire-effect'),
-            chickenWrapper: document.getElementById('chicken-wrapper'),
-            chickenSprite: document.getElementById('chicken-sprite'),
-            btnPlay: document.getElementById('btn-play'),
-            playingControls: document.getElementById('playing-controls'),
-            btnCashout: document.getElementById('btn-cashout'),
-            cashoutAmount: document.getElementById('cashout-amount'),
-            btnNext: document.getElementById('btn-next'),
-            nextMulti: document.getElementById('next-multi-display'),
-            riskIndicator: document.getElementById('risk-indicator'),
-            diffSlider: document.getElementById('difficulty-slider'),
-            statusOverlay: document.getElementById('status-overlay'),
-            statusMessage: document.getElementById('status-message'),
-            finishOverlay: document.getElementById('finish-overlay'),
-            finishEarned: document.getElementById('finish-earned'),
-            finishBalance: document.getElementById('finish-balance')
-        };
-
-        // --- Initialization ---
-        function init() {
-            renderLanes();
-            updateUI();
-            
-            // Handle bet input changes
-            els.betInput.addEventListener('input', (e) => {
-                let val = parseFloat(e.target.value);
-                if (isNaN(val) || val < 0) val = 0;
-                state.bet = val;
-                updateBetPreview();
-            });
-            els.betInput.addEventListener('blur', () => {
-                els.betInput.value = state.bet.toFixed(2);
-            });
-        }
-
-        // --- UI Rendering & Updates ---
-        function renderLanes() {
-            els.lanesContainer.innerHTML = '';
-            const multis = GAME_DATA[state.difficulty].multipliers;
-            
-            for (let i = 0; i < TOTAL_STEPS; i++) {
-                const lane = document.createElement('div');
-                lane.className = `flex-1 h-full lane-dashed-border relative flex justify-center items-center group transition-colors duration-300`;
-                lane.id = `lane-${i}`;
-                
-                // Multiplier Background Badge
-                const badge = document.createElement('div');
-                badge.className = `w-14 h-14 sm:w-20 sm:h-20 rounded-full border-4 border-slate-700/50 flex items-center justify-center bg-slate-800/50 shadow-inner transition-all duration-300`;
-                badge.id = `badge-${i}`;
-                
-                const text = document.createElement('span');
-                text.className = `font-mono font-bold text-slate-500 text-sm sm:text-lg transition-colors`;
-                text.innerText = `${multis[i]}x`;
-                text.id = `text-${i}`;
-
-                // Grates at the bottom
-                const grate = document.createElement('div');
-                grate.className = 'absolute bottom-0 w-[80%] h-12 border-t-8 border-slate-900 rounded-t-full opacity-30 flex justify-evenly items-end pb-2 overflow-hidden';
-                for(let g=0; g<5; g++) {
-                    grate.innerHTML += `<div class="w-1.5 h-full bg-slate-900 rounded-t-sm"></div>`;
-                }
-
-                badge.appendChild(text);
-                lane.appendChild(badge);
-                lane.appendChild(grate);
-                els.lanesContainer.appendChild(lane);
-            }
-        }
-
-        function updateUI() {
-            els.balance.innerText = state.balance.toFixed(2);
-            els.betInput.disabled = state.isPlaying;
-            updateFireEffect();
-            
-            // Toggle controls
-            if (state.isPlaying) {
-                els.btnPlay.classList.add('hidden');
-                els.playingControls.classList.remove('hidden');
-                els.profitPreview.classList.add('opacity-100');
-                
-                // Update active buttons based on state
-                if (state.currentStep >= 0) {
-                    const currentWin = state.bet * GAME_DATA[state.difficulty].multipliers[state.currentStep];
-                    els.cashoutAmount.innerText = `$${currentWin.toFixed(2)}`;
-                    els.profitPreview.innerText = `Win: $${currentWin.toFixed(2)}`;
-                } else {
-                    els.cashoutAmount.innerText = `$0.00`;
-                    els.profitPreview.innerText = `Win: $0.00`;
-                    els.btnCashout.disabled = true; // Cannot cashout before first jump
-                }
-
-                if (state.currentStep < TOTAL_STEPS - 1) {
-                    els.nextMulti.innerText = `${GAME_DATA[state.difficulty].multipliers[state.currentStep + 1]}x`;
-                    els.btnNext.disabled = false;
-                } else {
-                    els.btnNext.disabled = true; // Reached end
-                }
-
-                // Disable during animation
-                if(state.isAnimating) {
-                    els.btnCashout.disabled = true;
-                    els.btnNext.disabled = true;
-                } else if (state.currentStep >= 0) {
-                    els.btnCashout.disabled = false;
-                }
-
-            } else {
-                els.btnPlay.classList.remove('hidden');
-                els.playingControls.classList.add('hidden');
-                els.profitPreview.classList.remove('opacity-100');
-                
-                // Reset lane highlights
-                if (!state.showingFinishScreen) {
-                    for (let i = 0; i < TOTAL_STEPS; i++) {
-                        highlightLane(i, 'idle');
-                    }
-                }
-            }
-        }
-
-        function updateBetPreview() {
-            if(!state.isPlaying) {
-                 const potentialFirstWin = state.bet * GAME_DATA[state.difficulty].multipliers[0];
-                 els.profitPreview.innerText = `First Jump: $${potentialFirstWin.toFixed(2)}`;
-                 els.profitPreview.classList.add('opacity-100');
-            }
-        }
-
-        function setDifficulty(level, index) {
-            if (state.isPlaying) return;
-            
-            state.difficulty = level;
-            
-            // Update UI styling for difficulty tabs
-            const btns = document.querySelectorAll('.diff-btn');
-            btns.forEach((btn, i) => {
-                if (i === index) {
-                    btn.classList.remove('text-slate-400');
-                    btn.classList.add('text-white');
-                } else {
-                    btn.classList.add('text-slate-400');
-                    btn.classList.remove('text-white');
-                }
-            });
-
-            // Move slider
-            els.diffSlider.style.transform = `translateX(${index * 100}%)`;
-            
-            // Update Risk Indicator text
-            const diffData = GAME_DATA[level];
-            els.riskIndicator.className = `${diffData.riskColor}`;
-            els.riskIndicator.innerText = diffData.risk;
-
-            renderLanes();
-            updateBetPreview();
-        }
-
-        function adjustBet(action) {
-            if (state.isPlaying) return;
-            if (action === 'half') state.bet = Math.max(0.10, state.bet / 2);
-            if (action === 'double') state.bet = Math.min(state.balance, state.bet * 2);
-            els.betInput.value = state.bet.toFixed(2);
-            updateBetPreview();
-        }
-
-        function showMessage(msg, type) {
-            els.statusMessage.innerText = msg;
-            
-            if (type === 'win') els.statusMessage.className = 'text-5xl font-black italic tracking-widest drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] text-emerald-400 animate-win';
-            else if (type === 'lose') els.statusMessage.className = 'text-5xl font-black italic tracking-widest drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] text-red-500';
-            
-            els.statusOverlay.classList.remove('opacity-0');
-            setTimeout(() => {
-                els.statusOverlay.classList.add('opacity-0');
-            }, 2000);
-        }
-
-        function showFinishScreen(winAmount) {
-            state.showingFinishScreen = true;
-            els.finishEarned.innerText = `$${winAmount.toFixed(2)}`;
-            els.finishBalance.innerText = `$${state.balance.toFixed(2)}`;
-            els.finishOverlay.classList.remove('hidden');
-            els.finishOverlay.classList.add('flex');
-        }
-
-        function hideFinishScreen() {
-            state.showingFinishScreen = false;
-            els.finishOverlay.classList.add('hidden');
-            els.finishOverlay.classList.remove('flex');
-        }
-
-        function playAgainFromFinish() {
-            hideFinishScreen();
-            startGame();
-        }
-
-        function updateFireEffect() {
-            if (!els.fireEffect) return;
-
-            if (state.isPlaying) {
-                const progress = Math.max(0, state.currentStep + 1) / TOTAL_STEPS;
-                els.fireEffect.style.opacity = `${Math.min(0.2 + progress * 0.65, 0.9)}`;
-                els.fireEffect.style.transform = `translateX(${Math.min(progress * 8, 8)}px)`;
-            } else {
-                els.fireEffect.style.opacity = '0.22';
-                els.fireEffect.style.transform = 'translateX(0)';
-            }
-        }
-
-        // --- Visual Logic ---
-        function highlightLane(index, status) {
-            const badge = document.getElementById(`badge-${index}`);
-            const text = document.getElementById(`text-${index}`);
-            const lane = document.getElementById(`lane-${index}`);
-            
-            if(!badge || !text) return;
-
-            badge.className = `w-14 h-14 sm:w-20 sm:h-20 rounded-full border-4 flex items-center justify-center transition-all duration-300`;
-            text.className = `font-mono font-bold transition-colors text-sm sm:text-lg`;
-            lane.style.backgroundColor = 'transparent';
-
-            if (status === 'active') {
-                badge.classList.add('border-emerald-500', 'bg-emerald-500/20', 'shadow-[0_0_15px_rgba(16,185,129,0.5)]');
-                text.classList.add('text-emerald-400');
-                lane.style.backgroundColor = 'rgba(16, 185, 129, 0.05)';
-            } else if (status === 'passed') {
-                badge.classList.add('border-emerald-700', 'bg-slate-800');
-                text.classList.add('text-emerald-600');
-            } else if (status === 'died') {
-                badge.classList.add('border-red-500', 'bg-red-500/30', 'shadow-[0_0_15px_rgba(239,68,68,0.5)]');
-                text.classList.add('text-red-400');
-                lane.style.backgroundColor = 'rgba(239, 68, 68, 0.1)';
-            } else {
-                // Idle
-                badge.classList.add('border-slate-700/50', 'bg-slate-800/50');
-                text.classList.add('text-slate-500');
-            }
-        }
-
-        function calculateChickenPosition(stepIndex) {
-            const startZoneWidth = document.querySelector('.w-16.sm\\:w-24').offsetWidth;
-            if (stepIndex === -1) {
-                return `${startZoneWidth / 2}px`; // Center of start zone
-            }
-            
-            const lane = document.getElementById(`lane-${stepIndex}`);
-            if(!lane) return '0px';
-            
-            // X position: Start zone width + (lane index * lane width) + (half lane width)
-            const laneWidth = lane.offsetWidth;
-            return `${startZoneWidth + (stepIndex * laneWidth) + (laneWidth / 2)}px`;
-        }
-
-        function setChickenPosition(stepIndex) {
-            const position = calculateChickenPosition(stepIndex);
-            els.chickenWrapper.style.transform = `translate3d(${position}, 0, 0) translateX(-50%)`;
-        }
-
-        function resetChicken() {
-            els.chickenWrapper.style.transition = 'none'; // Snap back
-            els.chickenSprite.className = 'text-4xl sm:text-5xl drop-shadow-xl'; // Reset classes
-            els.chickenSprite.style.transform = '';
-            els.chickenSprite.style.opacity = '1';
-            els.chickenSprite.style.filter = 'drop-shadow(0px 10px 5px rgba(0,0,0,0.5))';
-            els.chickenSprite.innerText = '🐔';
-            
-            setChickenPosition(-1);
-            
-            // Force reflow before restoring transition
-            void els.chickenWrapper.offsetWidth; 
-            els.chickenWrapper.style.transition = 'transform 0.58s cubic-bezier(0.22, 1, 0.36, 1)';
-        }
-
-        // --- Core Game Loop ---
-
-        function startGame() {
-            if (state.balance < state.bet || state.bet <= 0) {
-                alert("Invalid bet amount or insufficient balance.");
-                return;
-            }
-
-            hideFinishScreen();
-            resetChicken();
-
-            // Deduct Bet
-            state.balance -= state.bet;
-            state.isPlaying = true;
-            state.currentStep = -1;
-            state.currentMultiplier = 0;
-            state.showingFinishScreen = false;
-            
-            resetChicken();
-            renderLanes(); // Reset UI
-            updateUI();
-            
-            // Automatically trigger first jump for better UX
-            setTimeout(() => takeStep(), 100);
-        }
-
-        function takeStep() {
-            if (!state.isPlaying || state.isAnimating) return;
-            
-            const nextStep = state.currentStep + 1;
-            if (nextStep >= TOTAL_STEPS) return;
-
-            state.isAnimating = true;
-            updateUI(); // Disable buttons
-
-            const survivalChance = GAME_DATA[state.difficulty].chance;
-            const roll = Math.random();
-            const survives = roll <= survivalChance;
-
-            // Animate jump logic
-            els.chickenSprite.classList.add('animate-hop');
-            
-            // Wait slight delay before moving horizontally to sync with arc
-            setTimeout(() => {
-                setChickenPosition(nextStep);
-            }, 50);
-
-            // Calculate outcome timing
-            setTimeout(() => {
-                els.chickenSprite.classList.remove('animate-hop');
-                
-                if (survives) {
-                    // --- SUCCESS ---
-                    if (state.currentStep >= 0) highlightLane(state.currentStep, 'passed');
-                    state.currentStep = nextStep;
-                    state.currentMultiplier = GAME_DATA[state.difficulty].multipliers[state.currentStep];
-                    highlightLane(state.currentStep, 'active');
-                    
-                    if (state.currentStep === TOTAL_STEPS - 1) {
-                        // Reached the end without getting hurt
-                        const winAmount = state.bet * state.currentMultiplier;
-                        setTimeout(() => {
-                            finishGame(winAmount, { showFinishScreen: true });
-                        }, 300);
-                    } else {
-                        state.isAnimating = false;
-                        updateUI();
-                    }
-
-                } else {
-                    // --- DEATH ---
-                    state.currentStep = nextStep;
-                    highlightLane(state.currentStep, 'died');
-                    
-                    // Death Animation
-                    els.chickenSprite.innerText = '🍗'; // Turn to food
-                    els.chickenSprite.classList.add('animate-squash');
-                    
-                    showMessage('FRIED!', 'lose');
-
-                    setTimeout(() => {
-                        finishGame(0); // 0 profit
-                    }, 1500);
-                }
-            }, 580); // Matches hop animation duration
-        }
-
-        function cashOut() {
-            if (!state.isPlaying || state.isAnimating || state.currentStep < 0) return;
-            
-            state.isAnimating = true;
-            updateUI();
-
-            const winAmount = state.bet * state.currentMultiplier;
-            showMessage(`+ $${winAmount.toFixed(2)}`, 'win');
-            
-            // Visual flair
-            const currentBadge = document.getElementById(`badge-${state.currentStep}`);
-            if(currentBadge) currentBadge.classList.add('animate-win');
-
-            setTimeout(() => {
-                finishGame(winAmount);
-            }, 1200);
-        }
-
-        function finishGame(winAmount, options = {}) {
-            state.balance += winAmount;
-            state.isPlaying = false;
-            state.isAnimating = false;
-            
-            updateUI();
-
-            if (options.showFinishScreen) {
-                showFinishScreen(winAmount);
-                return;
-            }
-
-            // Reset visually after a short delay
-            setTimeout(() => {
-                 if(!state.isPlaying) {
-                     resetChicken();
-                     renderLanes();
-                 }
-            }, 500);
-        }
-
-        // Handle Window Resize to keep chicken positioned correctly
-        window.addEventListener('resize', () => {
-            if(!state.isAnimating) {
-                // Temporarily remove transition for instant snap on resize
-                els.chickenWrapper.style.transition = 'none';
-                setChickenPosition(state.currentStep);
-                void els.chickenWrapper.offsetWidth;
-                els.chickenWrapper.style.transition = 'transform 0.58s cubic-bezier(0.22, 1, 0.36, 1)';
-            }
-        });
-
-        // Start
-        init();
-
-    </script>
+    <script src="script.js"></script>
 </body>
 
 </html>

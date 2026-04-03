@@ -1,3 +1,10 @@
+
+/* General View Transition */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.25s;
+  animation-timing-function: ease-in-out;
+}
         /* Custom Animations */
         @keyframes hop {
             /* Squash before jump */
@@ -21,9 +28,9 @@
         }
 
         @keyframes winPulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(202, 0, 19, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(202, 0, 19, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(202, 0, 19, 0); }
         }
 
         @keyframes fireFlicker {

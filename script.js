@@ -4,7 +4,7 @@
         // Match approximate values from typical crash games
         const GAME_DATA = {
             easy: {
-                name: 'Easy', risk: 'Low Risk', riskColor: 'text-emerald-400',
+                name: 'Easy', risk: 'Low Risk', riskColor: 'text-vibrant-red',
                 chance: 0.95, // 95% survival per step
                 multipliers: [1.03, 1.07, 1.12, 1.17, 1.23, 1.29, 1.36, 1.44, 1.53, 1.62]
             },
@@ -36,6 +36,16 @@
             currentMultiplier: 0,
             showingFinishScreen: false
         };
+
+        // --- Sounds ---
+        const sounds = {
+            bgMusic: new Audio('game_music/bg-muisc.mp3'),
+            bombDrop: new Audio('game_music/bomd-drop.wav'),
+            fire: new Audio('game_music/fire.wav'),
+            reward: new Audio('game_music/reward.wav')
+        };
+        sounds.bgMusic.loop = true;
+        sounds.bgMusic.volume = 0.4;
 
         // --- DOM Elements ---
         const els = {
@@ -91,11 +101,11 @@
                 
                 // Multiplier Background Badge
                 const badge = document.createElement('div');
-                badge.className = `w-14 h-14 sm:w-20 sm:h-20 rounded-full border-4 border-slate-700/50 flex items-center justify-center bg-slate-800/50 shadow-inner transition-all duration-300`;
+                badge.className = `w-12 h-12 sm:w-16 sm:h-16 rounded-full border-4 border-gray-green/20/50 flex items-center justify-center bg-charcoal/80/50 shadow-inner transition-all duration-300`;
                 badge.id = `badge-${i}`;
                 
                 const text = document.createElement('span');
-                text.className = `font-mono font-bold text-slate-500 text-sm sm:text-lg transition-colors`;
+                text.className = `font-mono font-bold text-gray-green text-xs sm:text-sm transition-colors`;
                 text.innerText = `${multis[i]}x`;
                 text.id = `text-${i}`;
 
@@ -103,7 +113,7 @@
                 const grate = document.createElement('div');
                 grate.className = 'absolute bottom-0 w-[80%] h-12 border-t-8 border-slate-900 rounded-t-full opacity-30 flex justify-evenly items-end pb-2 overflow-hidden';
                 for(let g=0; g<5; g++) {
-                    grate.innerHTML += `<div class="w-1.5 h-full bg-slate-900 rounded-t-sm"></div>`;
+                    grate.innerHTML += `<div class="w-1.5 h-full bg-charcoal/90 rounded-t-sm"></div>`;
                 }
 
                 badge.appendChild(text);
@@ -172,7 +182,13 @@
         }
 
         function setDifficulty(level, index) {
-            if (state.isPlaying) return;
+            if (state.isPlaying) {
+                // Reset the game/cashout automatically if difficulty is toggled during play
+                cashOut(); 
+                if (state.isPlaying) {
+                    finishGame(0);
+                }
+            }
             
             state.difficulty = level;
             
@@ -180,11 +196,11 @@
             const btns = document.querySelectorAll('.diff-btn');
             btns.forEach((btn, i) => {
                 if (i === index) {
-                    btn.classList.remove('text-slate-400');
-                    btn.classList.add('text-white');
+                    btn.classList.remove('text-gray-green');
+                    btn.classList.add('text-off-white');
                 } else {
-                    btn.classList.add('text-slate-400');
-                    btn.classList.remove('text-white');
+                    btn.classList.add('text-gray-green');
+                    btn.classList.remove('text-off-white');
                 }
             });
 
@@ -211,8 +227,8 @@
         function showMessage(msg, type) {
             els.statusMessage.innerText = msg;
             
-            if (type === 'win') els.statusMessage.className = 'text-5xl font-black italic tracking-widest drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] text-emerald-400 animate-win';
-            else if (type === 'lose') els.statusMessage.className = 'text-5xl font-black italic tracking-widest drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] text-red-500';
+            if (type === 'win') els.statusMessage.className = 'text-[32px] font-black tracking-widest drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] text-vibrant-red animate-win';
+            else if (type === 'lose') els.statusMessage.className = 'text-[32px] font-black tracking-widest drop-shadow-[0_5px_5px_rgba(0,0,0,0.8)] text-red-500';
             
             els.statusOverlay.classList.remove('opacity-0');
             setTimeout(() => {
@@ -239,6 +255,8 @@
             startGame();
         }
 
+        let explosionTimeout;
+
         function triggerExplosion(stepIndex) {
             // Full screen fade in of fire
             els.explosionEffect.style.transition = 'none';
@@ -247,6 +265,17 @@
             // Fade it in quickly
             els.explosionEffect.style.transition = 'opacity 0.2s ease-out';
             els.explosionEffect.style.opacity = '1';
+            
+            // Play fire sound
+            sounds.fire.currentTime = 0;
+            sounds.fire.play().catch(() => {});
+            
+            // Handle fade out after 6 seconds
+            if(explosionTimeout) clearTimeout(explosionTimeout);
+            explosionTimeout = setTimeout(() => {
+                els.explosionEffect.style.transition = 'opacity 0.5s ease-in';
+                els.explosionEffect.style.opacity = '0';
+            }, 6000);
         }
 
         // --- Visual Logic ---
@@ -257,25 +286,25 @@
             
             if(!badge || !text) return;
 
-            badge.className = `w-14 h-14 sm:w-20 sm:h-20 rounded-full border-4 flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] transform`;
-            text.className = `font-mono font-bold transition-all duration-500 text-sm sm:text-lg`;
+            badge.className = `w-12 h-12 sm:w-16 sm:h-16 rounded-full border-4 flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] transform`;
+            text.className = `font-mono font-bold transition-all duration-500 text-xs sm:text-sm`;
             lane.style.backgroundColor = 'transparent';
 
             if (status === 'active') {
-                badge.classList.add('border-emerald-500', 'bg-emerald-500/20', 'shadow-[0_0_20px_rgba(16,185,129,0.7)]', 'scale-110');
-                text.classList.add('text-emerald-400', 'scale-110');
+                badge.classList.add('border-vibrant-red', 'bg-vibrant-red/20', 'shadow-soft', 'scale-110');
+                text.classList.add('text-vibrant-red', 'scale-110');
                 lane.style.backgroundColor = 'rgba(16, 185, 129, 0.08)';
             } else if (status === 'passed') {
-                badge.classList.add('border-emerald-700', 'bg-slate-800');
-                text.classList.add('text-emerald-600');
+                badge.classList.add('border-vibrant-red/80', 'bg-charcoal/80');
+                text.classList.add('text-vibrant-red');
             } else if (status === 'died') {
                 badge.classList.add('border-red-500', 'bg-red-500/30', 'shadow-[0_0_25px_rgba(239,68,68,0.8)]', 'scale-110');
                 text.classList.add('text-red-400');
                 lane.style.backgroundColor = 'rgba(239, 68, 68, 0.15)';
             } else {
                 // Idle
-                badge.classList.add('border-slate-700/50', 'bg-slate-800/50');
-                text.classList.add('text-slate-500');
+                badge.classList.add('border-gray-green/20/50', 'bg-charcoal/80/50');
+                text.classList.add('text-gray-green');
             }
         }
 
@@ -300,15 +329,13 @@
 
         function resetChicken() {
             els.chickenWrapper.style.transition = 'none'; // Snap back
-            els.chickenSprite.className = 'w-12 h-12 sm:w-16 sm:h-16 drop-shadow-xl inline-block'; // Reset classes
+            els.chickenSprite.className = 'w-16 h-16 sm:w-20 sm:h-20 drop-shadow-xl inline-block'; // Reset classes
             els.chickenSprite.style.transform = '';
             els.chickenSprite.style.opacity = '1';
             els.chickenSprite.style.filter = 'drop-shadow(0px 10px 5px rgba(0,0,0,0.5))';
             els.chickenImg.src = 'assets/animation/Chicken.svg';
             
-            // Hide Explosion
-            els.explosionEffect.style.transition = 'none';
-            els.explosionEffect.style.opacity = '0';
+            // Do not hide explosion here immediately to allow 6s play
             
             setChickenPosition(-1);
             
@@ -323,6 +350,19 @@
             if (state.balance < state.bet || state.bet <= 0) {
                 alert("Invalid bet amount or insufficient balance.");
                 return;
+            }
+
+            // Immediately clear explosion on new game
+            if(explosionTimeout) {
+                clearTimeout(explosionTimeout);
+                explosionTimeout = null;
+            }
+            els.explosionEffect.style.transition = 'none';
+            els.explosionEffect.style.opacity = '0';
+
+            // Start background music on first play
+            if (sounds.bgMusic.paused) {
+                sounds.bgMusic.play().catch(e => console.log('Audio playback prevented by browser:', e));
             }
 
             hideFinishScreen();
@@ -351,6 +391,10 @@
 
             state.isAnimating = true;
             updateUI(); // Disable buttons
+            
+            // Play reward sound on each jump
+            sounds.reward.currentTime = 0;
+            sounds.reward.play().catch(() => {});
 
             const survivalChance = GAME_DATA[state.difficulty].chance;
             const roll = Math.random();
@@ -378,6 +422,12 @@
                     if (state.currentStep === TOTAL_STEPS - 1) {
                         // Reached the end without getting hurt
                         const winAmount = state.bet * state.currentMultiplier;
+                        
+                        sounds.reward.currentTime = 0;
+                        sounds.reward.play().catch(() => {});
+                        setTimeout(() => { sounds.reward.currentTime = 0; sounds.reward.play().catch(() => {}); }, 150);
+                        setTimeout(() => { sounds.reward.currentTime = 0; sounds.reward.play().catch(() => {}); }, 300);
+                        
                         triggerExplosion(state.currentStep);
                         setTimeout(() => {
                             finishGame(winAmount, { showFinishScreen: true });
@@ -413,6 +463,11 @@
             updateUI();
 
             const winAmount = state.bet * state.currentMultiplier;
+            
+            // Play reward sound
+            sounds.reward.currentTime = 0;
+            sounds.reward.play().catch(() => {});
+
             triggerExplosion(state.currentStep);
             showMessage(`+ $${winAmount.toFixed(2)}`, 'win');
             
